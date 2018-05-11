@@ -28,8 +28,9 @@ fi
 linter_targets=$(glide novendor)
 
 # Automatic checks
+# Disable strict gofmt
+# --enable=gofmt \
 test -z "$(gometalinter -j 4 --disable-all \
---enable=gofmt \
 --enable=golint \
 --enable=vet \
 --enable=gosimple \

@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -48,14 +49,14 @@ func TestMemPool(t *testing.T) {
 
 	// Test decode with latest protocol version.
 	readmsg := NewMsgMemPool()
-	err = readmsg.BtcDecode(&buf, pver, enc)
+	err = readmsg.Btcdecode(&buf, pver, enc)
 	if err != nil {
 		t.Errorf("decode of MsgMemPool failed [%v] err <%v>", buf, err)
 	}
 
 	// Older protocol versions should fail decode since message didn't
 	// exist yet.
-	err = readmsg.BtcDecode(&buf, oldPver, enc)
+	err = readmsg.Btcdecode(&buf, oldPver, enc)
 	if err == nil {
 		s := "decode of MsgMemPool passed for old protocol version %v err <%v>"
 		t.Errorf(s, msg, err)

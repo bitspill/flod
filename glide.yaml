@@ -1,7 +1,7 @@
-package: github.com/btcsuite/btcd
+package: github.com/bitspill/flod
 import:
 - package: github.com/btcsuite/btclog
-- package: github.com/btcsuite/btcutil
+- package: github.com/bitspill/floutil
   subpackages:
   - bloom
   - hdkeychain

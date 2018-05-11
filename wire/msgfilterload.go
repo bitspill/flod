@@ -1,4 +1,5 @@
 // Copyright (c) 2014-2015 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -49,13 +50,13 @@ type MsgFilterLoad struct {
 	Flags     BloomUpdateType
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgFilterLoad) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgFilterLoad) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < BIP0037Version {
 		str := fmt.Sprintf("filterload message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgFilterLoad.BtcDecode", str)
+		return messageError("MsgFilterLoad.Btcdecode", str)
 	}
 
 	var err error
@@ -73,7 +74,7 @@ func (msg *MsgFilterLoad) BtcDecode(r io.Reader, pver uint32, enc MessageEncodin
 	if msg.HashFuncs > MaxFilterLoadHashFuncs {
 		str := fmt.Sprintf("too many filter hash functions for message "+
 			"[count %v, max %v]", msg.HashFuncs, MaxFilterLoadHashFuncs)
-		return messageError("MsgFilterLoad.BtcDecode", str)
+		return messageError("MsgFilterLoad.Btcdecode", str)
 	}
 
 	return nil

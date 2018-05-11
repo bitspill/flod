@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -173,13 +174,13 @@ func TestBlockHeaderWire(t *testing.T) {
 		}
 
 		rbuf = bytes.NewReader(test.buf)
-		err = bh.BtcDecode(rbuf, pver, test.enc)
+		err = bh.Btcdecode(rbuf, pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcDecode #%d error %v", i, err)
+			t.Errorf("Btcdecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(&bh, test.out) {
-			t.Errorf("BtcDecode #%d\n got: %s want: %s", i,
+			t.Errorf("Btcdecode #%d\n got: %s want: %s", i,
 				spew.Sdump(&bh), spew.Sdump(test.out))
 			continue
 		}

@@ -1,4 +1,5 @@
 // Copyright (c) 2014 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -11,7 +12,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/btcsuite/btcd/btcjson"
+	"github.com/bitspill/flod/btcjson"
 )
 
 // TestWalletSvrWsNtfns tests all of the chain server websocket-specific
@@ -44,15 +45,15 @@ func TestWalletSvrWsNtfns(t *testing.T) {
 			},
 		},
 		{
-			name: "btcdconnected",
+			name: "flodconnected",
 			newNtfn: func() (interface{}, error) {
-				return btcjson.NewCmd("btcdconnected", true)
+				return btcjson.NewCmd("flodconnected", true)
 			},
 			staticNtfn: func() interface{} {
-				return btcjson.NewBtcdConnectedNtfn(true)
+				return btcjson.NewFlodConnectedNtfn(true)
 			},
-			marshalled: `{"jsonrpc":"1.0","method":"btcdconnected","params":[true],"id":null}`,
-			unmarshalled: &btcjson.BtcdConnectedNtfn{
+			marshalled: `{"jsonrpc":"1.0","method":"flodconnected","params":[true],"id":null}`,
+			unmarshalled: &btcjson.FlodConnectedNtfn{
 				Connected: true,
 			},
 		},

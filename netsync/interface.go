@@ -1,17 +1,18 @@
 // Copyright (c) 2017 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
 package netsync
 
 import (
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/mempool"
-	"github.com/btcsuite/btcd/peer"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/bitspill/flod/blockchain"
+	"github.com/bitspill/flod/chaincfg"
+	"github.com/bitspill/flod/chaincfg/chainhash"
+	"github.com/bitspill/flod/mempool"
+	"github.com/bitspill/flod/peer"
+	"github.com/bitspill/flod/wire"
+	"github.com/bitspill/floutil"
 )
 
 // PeerNotifier exposes methods to notify peers of status changes to
@@ -24,7 +25,7 @@ type PeerNotifier interface {
 
 	RelayInventory(invVect *wire.InvVect, data interface{})
 
-	TransactionConfirmed(tx *btcutil.Tx)
+	TransactionConfirmed(tx *floutil.Tx)
 }
 
 // Config is a configuration struct used to initialize a new SyncManager.

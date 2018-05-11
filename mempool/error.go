@@ -1,12 +1,13 @@
 // Copyright (c) 2014-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
 package mempool
 
 import (
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitspill/flod/blockchain"
+	"github.com/bitspill/flod/wire"
 )
 
 // RuleError identifies a rule violation.  It is used to indicate that

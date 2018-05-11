@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -69,17 +70,17 @@ func (msg *MsgVersion) AddService(service ServiceFlag) {
 	msg.Services |= service
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // The version message is special in that the protocol version hasn't been
 // negotiated yet.  As a result, the pver field is ignored and any fields which
 // are added in new versions are optional.  This also mean that r must be a
 // *bytes.Buffer so the number of remaining bytes can be ascertained.
 //
 // This is part of the Message interface implementation.
-func (msg *MsgVersion) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgVersion) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	buf, ok := r.(*bytes.Buffer)
 	if !ok {
-		return fmt.Errorf("MsgVersion.BtcDecode reader is not a " +
+		return fmt.Errorf("MsgVersion.Btcdecode reader is not a " +
 			"*bytes.Buffer")
 	}
 

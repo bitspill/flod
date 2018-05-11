@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2015 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -16,9 +17,9 @@ import (
 // This message has no payload.
 type MsgGetAddr struct{}
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgGetAddr) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgGetAddr) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	return nil
 }
 

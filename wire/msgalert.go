@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2015 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -331,9 +332,9 @@ type MsgAlert struct {
 	Payload *Alert
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgAlert) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgAlert) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	var err error
 
 	msg.SerializedPayload, err = ReadVarBytes(r, pver, MaxMessagePayload,

@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -15,9 +16,9 @@ type fakeMessage struct {
 	forceLenErr    bool
 }
 
-// BtcDecode doesn't do anything.  It just satisfies the wire.Message
+// Btcdecode doesn't do anything.  It just satisfies the wire.Message
 // interface.
-func (msg *fakeMessage) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *fakeMessage) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	return nil
 }
 

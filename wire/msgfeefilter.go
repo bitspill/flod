@@ -1,4 +1,5 @@
 // Copyright (c) 2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -19,13 +20,13 @@ type MsgFeeFilter struct {
 	MinFee int64
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgFeeFilter) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgFeeFilter) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < FeeFilterVersion {
 		str := fmt.Sprintf("feefilter message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgFeeFilter.BtcDecode", str)
+		return messageError("MsgFeeFilter.Btcdecode", str)
 	}
 
 	return readElement(r, &msg.MinFee)

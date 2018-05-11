@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2015 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -20,15 +21,15 @@ type MsgPong struct {
 	Nonce uint64
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgPong) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgPong) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	// NOTE: <= is not a mistake here.  The BIP0031 was defined as AFTER
 	// the version unlike most others.
 	if pver <= BIP0031Version {
 		str := fmt.Sprintf("pong message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgPong.BtcDecode", str)
+		return messageError("MsgPong.Btcdecode", str)
 	}
 
 	return readElement(r, &msg.Nonce)

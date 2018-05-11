@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -229,13 +230,13 @@ func TestVersionWire(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgVersion
 		rbuf := bytes.NewBuffer(test.buf)
-		err = msg.BtcDecode(rbuf, test.pver, test.enc)
+		err = msg.Btcdecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcDecode #%d error %v", i, err)
+			t.Errorf("Btcdecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(&msg, test.out) {
-			t.Errorf("BtcDecode #%d\n got: %s want: %s", i,
+			t.Errorf("Btcdecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.out))
 			continue
 		}
@@ -252,12 +253,12 @@ func TestVersionWireErrors(t *testing.T) {
 	enc := BaseEncoding
 	wireErr := &MessageError{}
 
-	// Ensure calling MsgVersion.BtcDecode with a non *bytes.Buffer returns
+	// Ensure calling MsgVersion.Btcdecode with a non *bytes.Buffer returns
 	// error.
 	fr := newFixedReader(0, []byte{})
-	if err := baseVersion.BtcDecode(fr, pver, enc); err == nil {
+	if err := baseVersion.Btcdecode(fr, pver, enc); err == nil {
 		t.Errorf("Did not received error when calling " +
-			"MsgVersion.BtcDecode with non *bytes.Buffer")
+			"MsgVersion.Btcdecode with non *bytes.Buffer")
 	}
 
 	// Copy the base version and change the user agent to exceed max limits.
@@ -345,9 +346,9 @@ func TestVersionWireErrors(t *testing.T) {
 		// Decode from wire format.
 		var msg MsgVersion
 		buf := bytes.NewBuffer(test.buf[0:test.max])
-		err = msg.BtcDecode(buf, test.pver, test.enc)
+		err = msg.Btcdecode(buf, test.pver, test.enc)
 		if reflect.TypeOf(err) != reflect.TypeOf(test.readErr) {
-			t.Errorf("BtcDecode #%d wrong error got: %v, want: %v",
+			t.Errorf("Btcdecode #%d wrong error got: %v, want: %v",
 				i, err, test.readErr)
 			continue
 		}
@@ -356,7 +357,7 @@ func TestVersionWireErrors(t *testing.T) {
 		// equality.
 		if _, ok := err.(*MessageError); !ok {
 			if err != test.readErr {
-				t.Errorf("BtcDecode #%d wrong error got: %v, "+
+				t.Errorf("Btcdecode #%d wrong error got: %v, "+
 					"want: %v", i, err, test.readErr)
 				continue
 			}
@@ -405,7 +406,7 @@ func TestVersionOptionalFields(t *testing.T) {
 	// uaVersion is a version message that contains all fields through
 	// the UserAgent field.
 	uaVersion := nonceVersion
-	uaVersion.UserAgent = "/btcdtest:0.0.1/"
+	uaVersion.UserAgent = "/flodtest:0.0.1/"
 	uaVersionEncoded := make([]byte, len(baseVersionEncoded)-4)
 	copy(uaVersionEncoded, baseVersionEncoded)
 
@@ -458,13 +459,13 @@ func TestVersionOptionalFields(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgVersion
 		rbuf := bytes.NewBuffer(test.buf)
-		err := msg.BtcDecode(rbuf, test.pver, test.enc)
+		err := msg.Btcdecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcDecode #%d error %v", i, err)
+			t.Errorf("Btcdecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(&msg, test.msg) {
-			t.Errorf("BtcDecode #%d\n got: %s want: %s", i,
+			t.Errorf("Btcdecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.msg))
 			continue
 		}
@@ -489,7 +490,7 @@ var baseVersion = &MsgVersion{
 		Port:      8333,
 	},
 	Nonce:     123123, // 0x1e0f3
-	UserAgent: "/btcdtest:0.0.1/",
+	UserAgent: "/flodtest:0.0.1/",
 	LastBlock: 234234, // 0x392fa
 }
 
@@ -511,7 +512,7 @@ var baseVersionEncoded = []byte{
 	0x20, 0x8d, // Port 8333 in big-endian
 	0xf3, 0xe0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, // Nonce
 	0x10, // Varint for user agent length
-	0x2f, 0x62, 0x74, 0x63, 0x64, 0x74, 0x65, 0x73,
+	0x2f, 0x66, 0x6c, 0x6f, 0x64, 0x74, 0x65, 0x73,
 	0x74, 0x3a, 0x30, 0x2e, 0x30, 0x2e, 0x31, 0x2f, // User agent
 	0xfa, 0x92, 0x03, 0x00, // Last block
 }
@@ -535,7 +536,7 @@ var baseVersionBIP0037 = &MsgVersion{
 		Port:      8333,
 	},
 	Nonce:     123123, // 0x1e0f3
-	UserAgent: "/btcdtest:0.0.1/",
+	UserAgent: "/flodtest:0.0.1/",
 	LastBlock: 234234, // 0x392fa
 }
 
@@ -557,7 +558,7 @@ var baseVersionBIP0037Encoded = []byte{
 	0x20, 0x8d, // Port 8333 in big-endian
 	0xf3, 0xe0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, // Nonce
 	0x10, // Varint for user agent length
-	0x2f, 0x62, 0x74, 0x63, 0x64, 0x74, 0x65, 0x73,
+	0x2f, 0x66, 0x6c, 0x6f, 0x64, 0x74, 0x65, 0x73,
 	0x74, 0x3a, 0x30, 0x2e, 0x30, 0x2e, 0x31, 0x2f, // User agent
 	0xfa, 0x92, 0x03, 0x00, // Last block
 	0x01, // Relay tx

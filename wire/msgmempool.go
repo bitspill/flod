@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2015 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -17,13 +18,13 @@ import (
 // starting with BIP0035Version.
 type MsgMemPool struct{}
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgMemPool) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgMemPool) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < BIP0035Version {
 		str := fmt.Sprintf("mempool message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgMemPool.BtcDecode", str)
+		return messageError("MsgMemPool.Btcdecode", str)
 	}
 
 	return nil

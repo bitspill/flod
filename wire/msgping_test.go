@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -80,7 +81,7 @@ func TestPingBIP0031(t *testing.T) {
 
 	// Test decode with old protocol version.
 	readmsg := NewMsgPing(0)
-	err = readmsg.BtcDecode(&buf, pver, enc)
+	err = readmsg.Btcdecode(&buf, pver, enc)
 	if err != nil {
 		t.Errorf("decode of MsgPing failed [%v] err <%v>", buf, err)
 	}
@@ -114,7 +115,7 @@ func TestPingCrossProtocol(t *testing.T) {
 
 	// Decode with old protocol version.
 	readmsg := NewMsgPing(0)
-	err = readmsg.BtcDecode(&buf, BIP0031Version, BaseEncoding)
+	err = readmsg.Btcdecode(&buf, BIP0031Version, BaseEncoding)
 	if err != nil {
 		t.Errorf("decode of MsgPing failed [%v] err <%v>", buf, err)
 	}
@@ -182,13 +183,13 @@ func TestPingWire(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgPing
 		rbuf := bytes.NewReader(test.buf)
-		err = msg.BtcDecode(rbuf, test.pver, test.enc)
+		err = msg.Btcdecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcDecode #%d error %v", i, err)
+			t.Errorf("Btcdecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(msg, test.out) {
-			t.Errorf("BtcDecode #%d\n got: %s want: %s", i,
+			t.Errorf("Btcdecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.out))
 			continue
 		}
@@ -235,9 +236,9 @@ func TestPingWireErrors(t *testing.T) {
 		// Decode from wire format.
 		var msg MsgPing
 		r := newFixedReader(test.max, test.buf)
-		err = msg.BtcDecode(r, test.pver, test.enc)
+		err = msg.Btcdecode(r, test.pver, test.enc)
 		if err != test.readErr {
-			t.Errorf("BtcDecode #%d wrong error got: %v, want: %v",
+			t.Errorf("Btcdecode #%d wrong error got: %v, want: %v",
 				i, err, test.readErr)
 			continue
 		}

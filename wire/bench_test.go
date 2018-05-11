@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -13,7 +14,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/bitspill/flod/chaincfg/chainhash"
 )
 
 // genesisCoinbaseTx is the coinbase transaction for the genesis blocks for
@@ -404,7 +405,7 @@ func BenchmarkDecodeGetHeaders(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		r.Seek(0, 0)
-		msg.BtcDecode(r, pver, LatestEncoding)
+		msg.Btcdecode(r, pver, LatestEncoding)
 	}
 }
 
@@ -434,7 +435,7 @@ func BenchmarkDecodeHeaders(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		r.Seek(0, 0)
-		msg.BtcDecode(r, pver, LatestEncoding)
+		msg.Btcdecode(r, pver, LatestEncoding)
 	}
 }
 
@@ -464,7 +465,7 @@ func BenchmarkDecodeGetBlocks(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		r.Seek(0, 0)
-		msg.BtcDecode(r, pver, LatestEncoding)
+		msg.Btcdecode(r, pver, LatestEncoding)
 	}
 }
 
@@ -491,7 +492,7 @@ func BenchmarkDecodeAddr(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		r.Seek(0, 0)
-		msg.BtcDecode(r, pver, LatestEncoding)
+		msg.Btcdecode(r, pver, LatestEncoding)
 	}
 }
 
@@ -521,7 +522,7 @@ func BenchmarkDecodeInv(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		r.Seek(0, 0)
-		msg.BtcDecode(r, pver, LatestEncoding)
+		msg.Btcdecode(r, pver, LatestEncoding)
 	}
 }
 
@@ -551,7 +552,7 @@ func BenchmarkDecodeNotFound(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		r.Seek(0, 0)
-		msg.BtcDecode(r, pver, LatestEncoding)
+		msg.Btcdecode(r, pver, LatestEncoding)
 	}
 }
 
@@ -589,7 +590,7 @@ func BenchmarkDecodeMerkleBlock(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		r.Seek(0, 0)
-		msg.BtcDecode(r, pver, LatestEncoding)
+		msg.Btcdecode(r, pver, LatestEncoding)
 	}
 }
 

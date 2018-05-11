@@ -1,14 +1,15 @@
-hash: 976decfaf173d97d2e4572399490637aa12e217312a7d8b28813780a738e1151
-updated: 2017-08-24T17:28:45.8117156-05:00
+hash: 58acf0e0ed8a3a0ee9d070628a8f29ad375aa218a2a820ef4eeabd411c4d24c5
+updated: 2018-05-10T13:37:51.6979725-07:00
 imports:
-- name: github.com/btcsuite/btclog
-  version: 84c8d2346e9fc8c7b947e243b9c24e6df9fd206a
-- name: github.com/btcsuite/btcutil
-  version: 501929d3d046174c3d39f0ea54ece471aa17238c
+- name: github.com/bitspill/floutil
+  version: 17bafda120e15cca657ed963db260ba977b4cbb6
   subpackages:
   - base58
+  - bech32
   - bloom
   - hdkeychain
+- name: github.com/btcsuite/btclog
+  version: 84c8d2346e9fc8c7b947e243b9c24e6df9fd206a
 - name: github.com/btcsuite/go-socks
   version: 4720035b7bfd2a9bb130b1c184f8bbe41b6f0d0f
   subpackages:

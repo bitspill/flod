@@ -1,4 +1,5 @@
 // Copyright (c) 2014-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -94,7 +95,7 @@ func TestRejectLatest(t *testing.T) {
 
 	// Test decode with latest protocol version.
 	readMsg := MsgReject{}
-	err = readMsg.BtcDecode(&buf, pver, enc)
+	err = readMsg.Btcdecode(&buf, pver, enc)
 	if err != nil {
 		t.Errorf("decode of MsgReject failed %v err <%v>", buf.Bytes(),
 			err)
@@ -152,7 +153,7 @@ func TestRejectBeforeAdded(t *testing.T) {
 
 	//	// Test decode with old protocol version.
 	readMsg := MsgReject{}
-	err = readMsg.BtcDecode(&buf, pver, enc)
+	err = readMsg.Btcdecode(&buf, pver, enc)
 	if err == nil {
 		t.Errorf("decode of MsgReject succeeded when it shouldn't "+
 			"have %v", spew.Sdump(buf.Bytes()))
@@ -200,7 +201,7 @@ func TestRejectCrossProtocol(t *testing.T) {
 
 	// Decode with old protocol version.
 	readMsg := MsgReject{}
-	err = readMsg.BtcDecode(&buf, RejectVersion-1, BaseEncoding)
+	err = readMsg.Btcdecode(&buf, RejectVersion-1, BaseEncoding)
 	if err == nil {
 		t.Errorf("encode of MsgReject succeeded when it shouldn't "+
 			"have %v", msg)
@@ -290,13 +291,13 @@ func TestRejectWire(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgReject
 		rbuf := bytes.NewReader(test.buf)
-		err = msg.BtcDecode(rbuf, test.pver, test.enc)
+		err = msg.Btcdecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcDecode #%d error %v", i, err)
+			t.Errorf("Btcdecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(msg, test.msg) {
-			t.Errorf("BtcDecode #%d\n got: %s want: %s", i,
+			t.Errorf("Btcdecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.msg))
 			continue
 		}
@@ -369,9 +370,9 @@ func TestRejectWireErrors(t *testing.T) {
 		// Decode from wire format.
 		var msg MsgReject
 		r := newFixedReader(test.max, test.buf)
-		err = msg.BtcDecode(r, test.pver, test.enc)
+		err = msg.Btcdecode(r, test.pver, test.enc)
 		if reflect.TypeOf(err) != reflect.TypeOf(test.readErr) {
-			t.Errorf("BtcDecode #%d wrong error got: %v, want: %v",
+			t.Errorf("Btcdecode #%d wrong error got: %v, want: %v",
 				i, err, test.readErr)
 			continue
 		}
@@ -380,7 +381,7 @@ func TestRejectWireErrors(t *testing.T) {
 		// equality.
 		if _, ok := err.(*MessageError); !ok {
 			if err != test.readErr {
-				t.Errorf("BtcDecode #%d wrong error got: %v, "+
+				t.Errorf("Btcdecode #%d wrong error got: %v, "+
 					"want: %v", i, err, test.readErr)
 				continue
 			}

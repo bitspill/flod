@@ -1,4 +1,5 @@
 // Copyright (c) 2013-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -10,7 +11,7 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/bitspill/flod/chaincfg/chainhash"
 )
 
 const (
@@ -404,11 +405,11 @@ func (msg *MsgTx) Copy() *MsgTx {
 	return &newTx
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
 // See Deserialize for decoding transactions stored to disk, such as in a
 // database, as opposed to decoding transactions from the wire.
-func (msg *MsgTx) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgTx) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	version, err := binarySerializer.Uint32(r, littleEndian)
 	if err != nil {
 		return err
@@ -433,7 +434,7 @@ func (msg *MsgTx) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error
 		// flag types may be supported.
 		if flag[0] != 0x01 {
 			str := fmt.Sprintf("witness tx but flag byte is %x", flag)
-			return messageError("MsgTx.BtcDecode", str)
+			return messageError("MsgTx.Btcdecode", str)
 		}
 
 		// With the Segregated Witness specific fields decoded, we can
@@ -451,7 +452,7 @@ func (msg *MsgTx) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error
 		str := fmt.Sprintf("too many input transactions to fit into "+
 			"max message size [count %d, max %d]", count,
 			maxTxInPerMessage)
-		return messageError("MsgTx.BtcDecode", str)
+		return messageError("MsgTx.Btcdecode", str)
 	}
 
 	// returnScriptBuffers is a closure that returns any script buffers that
@@ -514,7 +515,7 @@ func (msg *MsgTx) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error
 		str := fmt.Sprintf("too many output transactions to fit into "+
 			"max message size [count %d, max %d]", count,
 			maxTxOutPerMessage)
-		return messageError("MsgTx.BtcDecode", str)
+		return messageError("MsgTx.Btcdecode", str)
 	}
 
 	// Deserialize the outputs.
@@ -553,7 +554,7 @@ func (msg *MsgTx) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error
 				str := fmt.Sprintf("too many witness items to fit "+
 					"into max message size [count %d, max %d]",
 					witCount, maxWitnessItemsPerInput)
-				return messageError("MsgTx.BtcDecode", str)
+				return messageError("MsgTx.Btcdecode", str)
 			}
 
 			// Then for witCount number of stack items, each item
@@ -651,8 +652,8 @@ func (msg *MsgTx) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error
 
 // Deserialize decodes a transaction from r into the receiver using a format
 // that is suitable for long-term storage such as a database while respecting
-// the Version field in the transaction.  This function differs from BtcDecode
-// in that BtcDecode decodes from the bitcoin wire protocol as it was sent
+// the Version field in the transaction.  This function differs from Btcdecode
+// in that Btcdecode decodes from the bitcoin wire protocol as it was sent
 // across the network.  The wire encoding can technically differ depending on
 // the protocol version and doesn't even really need to match the format of a
 // stored transaction at all.  As of the time this comment was written, the
@@ -662,8 +663,8 @@ func (msg *MsgTx) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error
 func (msg *MsgTx) Deserialize(r io.Reader) error {
 	// At the current time, there is no difference between the wire encoding
 	// at protocol version 0 and the stable long-term storage format.  As
-	// a result, make use of BtcDecode.
-	return msg.BtcDecode(r, 0, WitnessEncoding)
+	// a result, make use of Btcdecode.
+	return msg.Btcdecode(r, 0, WitnessEncoding)
 }
 
 // DeserializeNoWitness decodes a transaction from r into the receiver, where
@@ -671,7 +672,7 @@ func (msg *MsgTx) Deserialize(r io.Reader) error {
 // serialization format created to encode transaction bearing witness data
 // within inputs.
 func (msg *MsgTx) DeserializeNoWitness(r io.Reader) error {
-	return msg.BtcDecode(r, 0, BaseEncoding)
+	return msg.Btcdecode(r, 0, BaseEncoding)
 }
 
 // BtcEncode encodes the receiver to w using the bitcoin protocol encoding.

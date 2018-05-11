@@ -1,5 +1,6 @@
 // Copyright (c) 2014-2017 The btcsuite developers
 // Copyright (c) 2015-2017 The Decred developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -105,7 +106,7 @@ type OutPoint struct {
 // LoadTxFilterCmd defines the loadtxfilter request parameters to load or
 // reload a transaction filter.
 //
-// NOTE: This is a btcd extension ported from github.com/decred/dcrd/dcrjson
+// NOTE: This is a flod extension ported from github.com/decred/dcrd/dcrjson
 // and requires a websocket connection.
 type LoadTxFilterCmd struct {
 	Reload    bool
@@ -116,7 +117,7 @@ type LoadTxFilterCmd struct {
 // NewLoadTxFilterCmd returns a new instance which can be used to issue a
 // loadtxfilter JSON-RPC command.
 //
-// NOTE: This is a btcd extension ported from github.com/decred/dcrd/dcrjson
+// NOTE: This is a flod extension ported from github.com/decred/dcrd/dcrjson
 // and requires a websocket connection.
 func NewLoadTxFilterCmd(reload bool, addresses []string, outPoints []OutPoint) *LoadTxFilterCmd {
 	return &LoadTxFilterCmd{
@@ -205,7 +206,7 @@ func NewRescanCmd(beginBlock string, addresses []string, outPoints []OutPoint, e
 
 // RescanBlocksCmd defines the rescan JSON-RPC command.
 //
-// NOTE: This is a btcd extension ported from github.com/decred/dcrd/dcrjson
+// NOTE: This is a flod extension ported from github.com/decred/dcrd/dcrjson
 // and requires a websocket connection.
 type RescanBlocksCmd struct {
 	// Block hashes as a string array.
@@ -215,7 +216,7 @@ type RescanBlocksCmd struct {
 // NewRescanBlocksCmd returns a new instance which can be used to issue a rescan
 // JSON-RPC command.
 //
-// NOTE: This is a btcd extension ported from github.com/decred/dcrd/dcrjson
+// NOTE: This is a flod extension ported from github.com/decred/dcrd/dcrjson
 // and requires a websocket connection.
 func NewRescanBlocksCmd(blockHashes []string) *RescanBlocksCmd {
 	return &RescanBlocksCmd{BlockHashes: blockHashes}

@@ -1,4 +1,5 @@
 // Copyright (c) 2014-2016 The btcsuite developers
+// Copyright (c) 2018 The Flo developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -8,7 +9,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/bitspill/flod/chaincfg/chainhash"
 )
 
 // maxFlagsPerMerkleBlock is the maximum number of flag bytes that could
@@ -40,13 +41,13 @@ func (msg *MsgMerkleBlock) AddTxHash(hash *chainhash.Hash) error {
 	return nil
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgMerkleBlock) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgMerkleBlock) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < BIP0037Version {
 		str := fmt.Sprintf("merkleblock message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgMerkleBlock.BtcDecode", str)
+		return messageError("MsgMerkleBlock.Btcdecode", str)
 	}
 
 	err := readBlockHeader(r, pver, &msg.Header)
@@ -67,7 +68,7 @@ func (msg *MsgMerkleBlock) BtcDecode(r io.Reader, pver uint32, enc MessageEncodi
 	if count > maxTxPerBlock {
 		str := fmt.Sprintf("too many transaction hashes for message "+
 			"[count %v, max %v]", count, maxTxPerBlock)
-		return messageError("MsgMerkleBlock.BtcDecode", str)
+		return messageError("MsgMerkleBlock.Btcdecode", str)
 	}
 
 	// Create a contiguous slice of hashes to deserialize into in order to
@@ -102,13 +103,13 @@ func (msg *MsgMerkleBlock) BtcEncode(w io.Writer, pver uint32, enc MessageEncodi
 	if numHashes > maxTxPerBlock {
 		str := fmt.Sprintf("too many transaction hashes for message "+
 			"[count %v, max %v]", numHashes, maxTxPerBlock)
-		return messageError("MsgMerkleBlock.BtcDecode", str)
+		return messageError("MsgMerkleBlock.Btcdecode", str)
 	}
 	numFlagBytes := len(msg.Flags)
 	if numFlagBytes > maxFlagsPerMerkleBlock {
 		str := fmt.Sprintf("too many flag bytes for message [count %v, "+
 			"max %v]", numFlagBytes, maxFlagsPerMerkleBlock)
-		return messageError("MsgMerkleBlock.BtcDecode", str)
+		return messageError("MsgMerkleBlock.Btcdecode", str)
 	}
 
 	err := writeBlockHeader(w, pver, &msg.Header)

@@ -72,13 +72,13 @@ type MsgReject struct {
 	Hash chainhash.Hash
 }
 
-// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
+// Flodecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgReject) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgReject) Flodecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < RejectVersion {
 		str := fmt.Sprintf("reject message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgReject.Btcdecode", str)
+		return messageError("MsgReject.Flodecode", str)
 	}
 
 	// Command that was rejected.
@@ -114,13 +114,13 @@ func (msg *MsgReject) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) e
 	return nil
 }
 
-// BtcEncode encodes the receiver to w using the bitcoin protocol encoding.
+// FloEncode encodes the receiver to w using the bitcoin protocol encoding.
 // This is part of the Message interface implementation.
-func (msg *MsgReject) BtcEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
+func (msg *MsgReject) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
 	if pver < RejectVersion {
 		str := fmt.Sprintf("reject message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgReject.BtcEncode", str)
+		return messageError("MsgReject.FloEncode", str)
 	}
 
 	// Command that was rejected.

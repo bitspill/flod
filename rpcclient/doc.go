@@ -11,17 +11,17 @@ Overview
 This client provides a robust and easy to use client for interfacing with a
 Bitcoin RPC server that uses a flod/bitcoin core compatible Bitcoin JSON-RPC
 API.  This client has been tested with flod (https://github.com/bitspill/flod),
-btcwallet (https://github.com/btcsuite/btcwallet), and
+flowallet (https://github.com/btcsuite/flowallet), and
 bitcoin core (https://github.com/bitcoin).
 
 In addition to the compatible standard HTTP POST JSON-RPC API, flod and
-btcwallet provide a websocket interface that is more efficient than the standard
+flowallet provide a websocket interface that is more efficient than the standard
 HTTP POST method of accessing RPC.  The section below discusses the differences
 between HTTP POST and websockets.
 
 By default, this client assumes the RPC server supports websockets and has
 TLS enabled.  In practice, this currently means it assumes you are talking to
-flod or btcwallet by default.  However, configuration options are provided to
+flod or flowallet by default.  However, configuration options are provided to
 fall back to HTTP POST and disable TLS to support talking with inferior bitcoin
 core style RPC servers.
 
@@ -33,7 +33,7 @@ quite a bit of overhead to every call and lacks flexibility for features such as
 notifications.
 
 In contrast, the websocket-based JSON-RPC interface provided by flod and
-btcwallet only uses a single connection that remains open and allows
+flowallet only uses a single connection that remains open and allows
 asynchronous bi-directional communication.
 
 The websocket interface supports all of the same commands as HTTP POST, but they
@@ -105,16 +105,16 @@ Minor RPC Server Differences and Chain/Wallet Separation
 
 Some of the commands are extensions specific to a particular RPC server.  For
 example, the DebugLevel call is an extension only provided by flod (and
-btcwallet passthrough).  Therefore if you call one of these commands against
+flowallet passthrough).  Therefore if you call one of these commands against
 an RPC server that doesn't provide them, you will get an unimplemented error
 from the server.  An effort has been made to call out which commmands are
 extensions in their documentation.
 
 Also, it is important to realize that flod intentionally separates the wallet
-functionality into a separate process named btcwallet.  This means if you are
+functionality into a separate process named flowallet.  This means if you are
 connected to the flod RPC server directly, only the RPCs which are related to
 chain services will be available.  Depending on your application, you might only
-need chain-related RPCs.  In contrast, btcwallet provides pass through treatment
+need chain-related RPCs.  In contrast, flowallet provides pass through treatment
 for chain-related RPCs, so it supports them in addition to wallet-related RPCs.
 
 Errors
@@ -142,14 +142,14 @@ the type can vary, but usually will be best handled by simply showing/logging
 it.
 
 The third category of errors, that is errors returned by the server, can be
-detected by type asserting the error in a *btcjson.RPCError.  For example, to
+detected by type asserting the error in a *flojson.RPCError.  For example, to
 detect if a command is unimplemented by the remote RPC server:
 
   amount, err := client.GetBalance("")
   if err != nil {
-  	if jerr, ok := err.(*btcjson.RPCError); ok {
+  	if jerr, ok := err.(*flojson.RPCError); ok {
   		switch jerr.Code {
-  		case btcjson.ErrRPCUnimplemented:
+  		case flojson.ErrRPCUnimplemented:
   			// Handle not implemented error
 
   		// Handle other specific errors you care about
@@ -171,8 +171,8 @@ The following full-blown client examples are in the examples directory:
    Connects to a flod RPC server using TLS-secured websockets, registers for
    block connected and block disconnected notifications, and gets the current
    block count
- - btcwalletwebsockets
-   Connects to a btcwallet RPC server using TLS-secured websockets, registers
+ - flowalletwebsockets
+   Connects to a flowallet RPC server using TLS-secured websockets, registers
    for notifications about changes to account balances, and gets a list of
    unspent transaction outputs (utxos) the wallet can sign
 */

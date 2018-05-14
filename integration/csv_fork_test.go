@@ -16,9 +16,9 @@ import (
 	"time"
 
 	"github.com/bitspill/flod/blockchain"
-	"github.com/bitspill/flod/btcec"
 	"github.com/bitspill/flod/chaincfg"
 	"github.com/bitspill/flod/chaincfg/chainhash"
+	"github.com/bitspill/flod/floec"
 	"github.com/bitspill/flod/integration/rpctest"
 	"github.com/bitspill/flod/txscript"
 	"github.com/bitspill/flod/wire"
@@ -32,11 +32,11 @@ const (
 // makeTestOutput creates an on-chain output paying to a freshly generated
 // p2pkh output with the specified amount.
 func makeTestOutput(r *rpctest.Harness, t *testing.T,
-	amt floutil.Amount) (*btcec.PrivateKey, *wire.OutPoint, []byte, error) {
+	amt floutil.Amount) (*floec.PrivateKey, *wire.OutPoint, []byte, error) {
 
 	// Create a fresh key, then send some coins to an address spendable by
 	// that key.
-	key, err := btcec.NewPrivateKey(btcec.S256())
+	key, err := floec.NewPrivateKey(floec.S256())
 	if err != nil {
 		return nil, nil, nil, err
 	}

@@ -9,7 +9,7 @@ Package wire implements the bitcoin wire protocol.  A comprehensive suite of
 tests with 100% test coverage is provided to ensure proper functionality.
 
 There is an associated blog post about the release of this package
-[here](https://blog.conformal.com/btcwire-the-bitcoin-wire-protocol-package-from-btcd/).
+[here](https://blog.conformal.com/flowire-the-bitcoin-wire-protocol-package-from-flod/).
 
 This package has intentionally been designed so it can be used as a standalone
 package for any projects needing to interface with bitcoin peers at the wire
@@ -47,13 +47,13 @@ to a remote node running a bitcoin peer.  Example syntax is:
 	// Use the most recent protocol version supported by the package and the
 	// main bitcoin network.
 	pver := wire.ProtocolVersion
-	btcnet := wire.MainNet
+	flonet := wire.MainNet
 
 	// Reads and validates the next bitcoin message from conn using the
-	// protocol version pver and the bitcoin network btcnet.  The returns
+	// protocol version pver and the bitcoin network flonet.  The returns
 	// are a wire.Message, a []byte which contains the unmarshalled
 	// raw payload, and a possible error.
-	msg, rawPayload, err := wire.ReadMessage(conn, pver, btcnet)
+	msg, rawPayload, err := wire.ReadMessage(conn, pver, flonet)
 	if err != nil {
 		// Log and handle the error
 	}
@@ -72,15 +72,15 @@ from a remote peer is:
 	// Use the most recent protocol version supported by the package and the
 	// main bitcoin network.
 	pver := wire.ProtocolVersion
-	btcnet := wire.MainNet
+	flonet := wire.MainNet
 
 	// Create a new getaddr bitcoin message.
 	msg := wire.NewMsgGetAddr()
 
 	// Writes a bitcoin message msg to conn using the protocol version
-	// pver, and the bitcoin network btcnet.  The return is a possible
+	// pver, and the bitcoin network flonet.  The return is a possible
 	// error.
-	err := wire.WriteMessage(conn, msg, pver, btcnet)
+	err := wire.WriteMessage(conn, msg, pver, flonet)
 	if err != nil {
 		// Log and handle the error
 	}

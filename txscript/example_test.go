@@ -9,9 +9,9 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/bitspill/flod/btcec"
 	"github.com/bitspill/flod/chaincfg"
 	"github.com/bitspill/flod/chaincfg/chainhash"
+	"github.com/bitspill/flod/floec"
 	"github.com/bitspill/flod/txscript"
 	"github.com/bitspill/flod/wire"
 	"github.com/bitspill/floutil"
@@ -90,7 +90,7 @@ func ExampleSignTxOutput() {
 		fmt.Println(err)
 		return
 	}
-	privKey, pubKey := btcec.PrivKeyFromBytes(btcec.S256(), privKeyBytes)
+	privKey, pubKey := floec.PrivKeyFromBytes(floec.S256(), privKeyBytes)
 	pubKeyHash := floutil.Hash160(pubKey.SerializeCompressed())
 	addr, err := floutil.NewAddressPubKeyHash(pubKeyHash,
 		&chaincfg.MainNetParams)
@@ -101,7 +101,7 @@ func ExampleSignTxOutput() {
 
 	// For this example, create a fake transaction that represents what
 	// would ordinarily be the real transaction that is being spent.  It
-	// contains a single output that pays to address in the amount of 1 BTC.
+	// contains a single output that pays to address in the amount of 1 FLO.
 	originTx := wire.NewMsgTx(wire.TxVersion)
 	prevOut := wire.NewOutPoint(&chainhash.Hash{}, ^uint32(0))
 	txIn := wire.NewTxIn(prevOut, []byte{txscript.OP_0, txscript.OP_0}, nil)
@@ -131,7 +131,7 @@ func ExampleSignTxOutput() {
 	redeemTx.AddTxOut(txOut)
 
 	// Sign the redeeming transaction.
-	lookupKey := func(a floutil.Address) (*btcec.PrivateKey, bool, error) {
+	lookupKey := func(a floutil.Address) (*floec.PrivateKey, bool, error) {
 		// Ordinarily this function would involve looking up the private
 		// key for the provided address, but since the only thing being
 		// signed in this example uses the address associated with the

@@ -12,9 +12,9 @@ import (
 	"sync"
 
 	"github.com/bitspill/flod/blockchain"
-	"github.com/bitspill/flod/btcec"
 	"github.com/bitspill/flod/chaincfg"
 	"github.com/bitspill/flod/chaincfg/chainhash"
+	"github.com/bitspill/flod/floec"
 	"github.com/bitspill/flod/rpcclient"
 	"github.com/bitspill/flod/txscript"
 	"github.com/bitspill/flod/wire"
@@ -71,7 +71,7 @@ type undoEntry struct {
 // wallet functionality to the harness. The wallet uses a hard-coded HD key
 // hierarchy which promotes reproducibility between harness test runs.
 type memWallet struct {
-	coinbaseKey  *btcec.PrivateKey
+	coinbaseKey  *floec.PrivateKey
 	coinbaseAddr floutil.Address
 
 	// hdRoot is the root master private key for the wallet.
@@ -534,7 +534,7 @@ func (m *memWallet) ConfirmedBalance() floutil.Amount {
 }
 
 // keyToAddr maps the passed private to corresponding p2pkh address.
-func keyToAddr(key *btcec.PrivateKey, net *chaincfg.Params) (floutil.Address, error) {
+func keyToAddr(key *floec.PrivateKey, net *chaincfg.Params) (floutil.Address, error) {
 	serializedKey := key.PubKey().SerializeCompressed()
 	pubKeyAddr, err := floutil.NewAddressPubKey(serializedKey, net)
 	if err != nil {

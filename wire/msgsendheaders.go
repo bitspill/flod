@@ -18,25 +18,25 @@ import (
 // starting with SendHeadersVersion.
 type MsgSendHeaders struct{}
 
-// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
+// Flodecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgSendHeaders) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgSendHeaders) Flodecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < SendHeadersVersion {
 		str := fmt.Sprintf("sendheaders message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgSendHeaders.Btcdecode", str)
+		return messageError("MsgSendHeaders.Flodecode", str)
 	}
 
 	return nil
 }
 
-// BtcEncode encodes the receiver to w using the bitcoin protocol encoding.
+// FloEncode encodes the receiver to w using the bitcoin protocol encoding.
 // This is part of the Message interface implementation.
-func (msg *MsgSendHeaders) BtcEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
+func (msg *MsgSendHeaders) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
 	if pver < SendHeadersVersion {
 		str := fmt.Sprintf("sendheaders message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgSendHeaders.BtcEncode", str)
+		return messageError("MsgSendHeaders.FloEncode", str)
 	}
 
 	return nil

@@ -1,8 +1,8 @@
 hash: 58acf0e0ed8a3a0ee9d070628a8f29ad375aa218a2a820ef4eeabd411c4d24c5
-updated: 2018-05-10T13:37:51.6979725-07:00
+updated: 2018-05-14T15:39:07.0875251-07:00
 imports:
 - name: github.com/bitspill/floutil
-  version: 17bafda120e15cca657ed963db260ba977b4cbb6
+  version: 81d80164bfe514d567862a849f149d6f440af40a
   subpackages:
   - base58
   - bech32
@@ -42,7 +42,7 @@ imports:
   - svc
   - winapi
 - name: github.com/davecgh/go-spew
-  version: 346938d642f2ec3594ed81d874461961cd0faa76
+  version: 8991bc29aa16c548c550c7ff78260e27b9ab7c73
   subpackages:
   - spew
 - name: github.com/jessevdk/go-flags
@@ -52,7 +52,7 @@ imports:
   subpackages:
   - rotator
 - name: golang.org/x/crypto
-  version: 122d919ec1efcfb58483215da23f815853e24b81
+  version: 2fc4c88bf43f0ea5ea305eae2b7af24b2cc93287
   subpackages:
   - ripemd160
 testImports: []

@@ -8,8 +8,8 @@ package txscript
 import (
 	"sync"
 
-	"github.com/bitspill/flod/btcec"
 	"github.com/bitspill/flod/chaincfg/chainhash"
+	"github.com/bitspill/flod/floec"
 )
 
 // sigCacheEntry represents an entry in the SigCache. Entries within the
@@ -19,8 +19,8 @@ import (
 // match. In the occasion that two sigHashes collide, the newer sigHash will
 // simply overwrite the existing entry.
 type sigCacheEntry struct {
-	sig    *btcec.Signature
-	pubKey *btcec.PublicKey
+	sig    *floec.Signature
+	pubKey *floec.PublicKey
 }
 
 // SigCache implements an ECDSA signature verification cache with a randomized
@@ -56,7 +56,7 @@ func NewSigCache(maxEntries uint) *SigCache {
 //
 // NOTE: This function is safe for concurrent access. Readers won't be blocked
 // unless there exists a writer, adding an entry to the SigCache.
-func (s *SigCache) Exists(sigHash chainhash.Hash, sig *btcec.Signature, pubKey *btcec.PublicKey) bool {
+func (s *SigCache) Exists(sigHash chainhash.Hash, sig *floec.Signature, pubKey *floec.PublicKey) bool {
 	s.RLock()
 	entry, ok := s.validSigs[sigHash]
 	s.RUnlock()
@@ -71,7 +71,7 @@ func (s *SigCache) Exists(sigHash chainhash.Hash, sig *btcec.Signature, pubKey *
 //
 // NOTE: This function is safe for concurrent access. Writers will block
 // simultaneous readers until function execution has concluded.
-func (s *SigCache) Add(sigHash chainhash.Hash, sig *btcec.Signature, pubKey *btcec.PublicKey) {
+func (s *SigCache) Add(sigHash chainhash.Hash, sig *floec.Signature, pubKey *floec.PublicKey) {
 	s.Lock()
 	defer s.Unlock()
 

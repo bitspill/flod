@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bitspill/flod/btcec"
 	"github.com/bitspill/flod/chaincfg"
 	"github.com/bitspill/flod/chaincfg/chainhash"
+	"github.com/bitspill/flod/floec"
 	"github.com/bitspill/flod/txscript"
 	"github.com/bitspill/flod/wire"
 	"github.com/bitspill/floutil"
@@ -99,7 +99,7 @@ func TestCalcMinRequiredTxRelayFee(t *testing.T) {
 func TestCheckPkScriptStandard(t *testing.T) {
 	var pubKeys [][]byte
 	for i := 0; i < 4; i++ {
-		pk, err := btcec.NewPrivateKey(btcec.S256())
+		pk, err := floec.NewPrivateKey(floec.S256())
 		if err != nil {
 			t.Fatalf("TestCheckPkScriptStandard NewPrivateKey failed: %v",
 				err)
@@ -303,7 +303,7 @@ func TestCheckTransactionStandard(t *testing.T) {
 		t.Fatalf("PayToAddrScript: unexpected error: %v", err)
 	}
 	dummyTxOut := wire.TxOut{
-		Value:    100000000, // 1 BTC
+		Value:    100000000, // 1 FLO
 		PkScript: dummyPkScript,
 	}
 

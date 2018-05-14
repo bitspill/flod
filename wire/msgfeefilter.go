@@ -20,25 +20,25 @@ type MsgFeeFilter struct {
 	MinFee int64
 }
 
-// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
+// Flodecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgFeeFilter) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgFeeFilter) Flodecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < FeeFilterVersion {
 		str := fmt.Sprintf("feefilter message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgFeeFilter.Btcdecode", str)
+		return messageError("MsgFeeFilter.Flodecode", str)
 	}
 
 	return readElement(r, &msg.MinFee)
 }
 
-// BtcEncode encodes the receiver to w using the bitcoin protocol encoding.
+// FloEncode encodes the receiver to w using the bitcoin protocol encoding.
 // This is part of the Message interface implementation.
-func (msg *MsgFeeFilter) BtcEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
+func (msg *MsgFeeFilter) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
 	if pver < FeeFilterVersion {
 		str := fmt.Sprintf("feefilter message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgFeeFilter.BtcEncode", str)
+		return messageError("MsgFeeFilter.FloEncode", str)
 	}
 
 	return writeElement(w, msg.MinFee)

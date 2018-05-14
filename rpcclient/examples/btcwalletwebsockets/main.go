@@ -28,8 +28,8 @@ func main() {
 		},
 	}
 
-	// Connect to local btcwallet RPC server using websockets.
-	certHomeDir := floutil.AppDataDir("btcwallet", false)
+	// Connect to local flowallet RPC server using websockets.
+	certHomeDir := floutil.AppDataDir("flowallet", false)
 	certs, err := ioutil.ReadFile(filepath.Join(certHomeDir, "rpc.cert"))
 	if err != nil {
 		log.Fatal(err)

@@ -48,9 +48,9 @@ func TestMsgAlert(t *testing.T) {
 			maxPayload, wantPayload)
 	}
 
-	// Test BtcEncode with Payload == nil
+	// Test FloEncode with Payload == nil
 	var buf bytes.Buffer
-	err := msg.BtcEncode(&buf, pver, encoding)
+	err := msg.FloEncode(&buf, pver, encoding)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -59,15 +59,15 @@ func TestMsgAlert(t *testing.T) {
 	expectedBuf = append(expectedBuf, []byte{0x08}...)
 	expectedBuf = append(expectedBuf, signature...)
 	if !bytes.Equal(buf.Bytes(), expectedBuf) {
-		t.Errorf("BtcEncode got: %s want: %s",
+		t.Errorf("FloEncode got: %s want: %s",
 			spew.Sdump(buf.Bytes()), spew.Sdump(expectedBuf))
 	}
 
-	// Test BtcEncode with Payload != nil
+	// Test FloEncode with Payload != nil
 	// note: Payload is an empty Alert but not nil
 	msg.Payload = new(Alert)
 	buf = *new(bytes.Buffer)
-	err = msg.BtcEncode(&buf, pver, encoding)
+	err = msg.FloEncode(&buf, pver, encoding)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -78,7 +78,7 @@ func TestMsgAlert(t *testing.T) {
 	expectedBuf = append(expectedBuf, []byte{0x08}...)
 	expectedBuf = append(expectedBuf, signature...)
 	if !bytes.Equal(buf.Bytes(), expectedBuf) {
-		t.Errorf("BtcEncode got: %s want: %s",
+		t.Errorf("FloEncode got: %s want: %s",
 			spew.Sdump(buf.Bytes()), spew.Sdump(expectedBuf))
 	}
 }
@@ -152,13 +152,13 @@ func TestMsgAlertWire(t *testing.T) {
 	for i, test := range tests {
 		// Encode the message to wire format.
 		var buf bytes.Buffer
-		err := test.in.BtcEncode(&buf, test.pver, test.enc)
+		err := test.in.FloEncode(&buf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcEncode #%d error %v", i, err)
+			t.Errorf("FloEncode #%d error %v", i, err)
 			continue
 		}
 		if !bytes.Equal(buf.Bytes(), test.buf) {
-			t.Errorf("BtcEncode #%d\n got: %s want: %s", i,
+			t.Errorf("FloEncode #%d\n got: %s want: %s", i,
 				spew.Sdump(buf.Bytes()), spew.Sdump(test.buf))
 			continue
 		}
@@ -166,13 +166,13 @@ func TestMsgAlertWire(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgAlert
 		rbuf := bytes.NewReader(test.buf)
-		err = msg.Btcdecode(rbuf, test.pver, test.enc)
+		err = msg.Flodecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("Btcdecode #%d error %v", i, err)
+			t.Errorf("Flodecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(&msg, test.out) {
-			t.Errorf("Btcdecode #%d\n got: %s want: %s", i,
+			t.Errorf("Flodecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.out))
 			continue
 		}
@@ -217,9 +217,9 @@ func TestMsgAlertWireErrors(t *testing.T) {
 	for i, test := range tests {
 		// Encode to wire format.
 		w := newFixedWriter(test.max)
-		err := test.in.BtcEncode(w, test.pver, test.enc)
+		err := test.in.FloEncode(w, test.pver, test.enc)
 		if reflect.TypeOf(err) != reflect.TypeOf(test.writeErr) {
-			t.Errorf("BtcEncode #%d wrong error got: %v, want: %v",
+			t.Errorf("FloEncode #%d wrong error got: %v, want: %v",
 				i, err, test.writeErr)
 			continue
 		}
@@ -228,7 +228,7 @@ func TestMsgAlertWireErrors(t *testing.T) {
 		// equality.
 		if _, ok := err.(*MessageError); !ok {
 			if err != test.writeErr {
-				t.Errorf("BtcEncode #%d wrong error got: %v, "+
+				t.Errorf("FloEncode #%d wrong error got: %v, "+
 					"want: %v", i, err, test.writeErr)
 				continue
 			}
@@ -237,9 +237,9 @@ func TestMsgAlertWireErrors(t *testing.T) {
 		// Decode from wire format.
 		var msg MsgAlert
 		r := newFixedReader(test.max, test.buf)
-		err = msg.Btcdecode(r, test.pver, test.enc)
+		err = msg.Flodecode(r, test.pver, test.enc)
 		if reflect.TypeOf(err) != reflect.TypeOf(test.readErr) {
-			t.Errorf("Btcdecode #%d wrong error got: %v, want: %v",
+			t.Errorf("Flodecode #%d wrong error got: %v, want: %v",
 				i, err, test.readErr)
 			continue
 		}
@@ -248,7 +248,7 @@ func TestMsgAlertWireErrors(t *testing.T) {
 		// equality.
 		if _, ok := err.(*MessageError); !ok {
 			if err != test.readErr {
-				t.Errorf("Btcdecode #%d wrong error got: %v, "+
+				t.Errorf("Flodecode #%d wrong error got: %v, "+
 					"want: %v", i, err, test.readErr)
 				continue
 			}
@@ -258,9 +258,9 @@ func TestMsgAlertWireErrors(t *testing.T) {
 	// Test Error on empty Payload
 	baseMsgAlert.SerializedPayload = []byte{}
 	w := new(bytes.Buffer)
-	err := baseMsgAlert.BtcEncode(w, pver, encoding)
+	err := baseMsgAlert.FloEncode(w, pver, encoding)
 	if _, ok := err.(*MessageError); !ok {
-		t.Errorf("MsgAlert.BtcEncode wrong error got: %T, want: %T",
+		t.Errorf("MsgAlert.FloEncode wrong error got: %T, want: %T",
 			err, MessageError{})
 	}
 
@@ -269,9 +269,9 @@ func TestMsgAlertWireErrors(t *testing.T) {
 	baseMsgAlert.Payload = new(Alert)
 	baseMsgAlert.Payload.SetCancel = make([]int32, maxCountSetCancel+1)
 	buf := *new(bytes.Buffer)
-	err = baseMsgAlert.BtcEncode(&buf, pver, encoding)
+	err = baseMsgAlert.FloEncode(&buf, pver, encoding)
 	if _, ok := err.(*MessageError); !ok {
-		t.Errorf("MsgAlert.BtcEncode wrong error got: %T, want: %T",
+		t.Errorf("MsgAlert.FloEncode wrong error got: %T, want: %T",
 			err, MessageError{})
 	}
 
@@ -279,9 +279,9 @@ func TestMsgAlertWireErrors(t *testing.T) {
 	baseMsgAlert.Payload = new(Alert)
 	baseMsgAlert.Payload.SetSubVer = make([]string, maxCountSetSubVer+1)
 	buf = *new(bytes.Buffer)
-	err = baseMsgAlert.BtcEncode(&buf, pver, encoding)
+	err = baseMsgAlert.FloEncode(&buf, pver, encoding)
 	if _, ok := err.(*MessageError); !ok {
-		t.Errorf("MsgAlert.BtcEncode wrong error got: %T, want: %T",
+		t.Errorf("MsgAlert.FloEncode wrong error got: %T, want: %T",
 			err, MessageError{})
 	}
 }

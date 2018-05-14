@@ -74,14 +74,14 @@ func TestPingBIP0031(t *testing.T) {
 
 	// Test encode with old protocol version.
 	var buf bytes.Buffer
-	err = msg.BtcEncode(&buf, pver, enc)
+	err = msg.FloEncode(&buf, pver, enc)
 	if err != nil {
 		t.Errorf("encode of MsgPing failed %v err <%v>", msg, err)
 	}
 
 	// Test decode with old protocol version.
 	readmsg := NewMsgPing(0)
-	err = readmsg.Btcdecode(&buf, pver, enc)
+	err = readmsg.Flodecode(&buf, pver, enc)
 	if err != nil {
 		t.Errorf("decode of MsgPing failed [%v] err <%v>", buf, err)
 	}
@@ -108,14 +108,14 @@ func TestPingCrossProtocol(t *testing.T) {
 
 	// Encode with latest protocol version.
 	var buf bytes.Buffer
-	err = msg.BtcEncode(&buf, ProtocolVersion, BaseEncoding)
+	err = msg.FloEncode(&buf, ProtocolVersion, BaseEncoding)
 	if err != nil {
 		t.Errorf("encode of MsgPing failed %v err <%v>", msg, err)
 	}
 
 	// Decode with old protocol version.
 	readmsg := NewMsgPing(0)
-	err = readmsg.Btcdecode(&buf, BIP0031Version, BaseEncoding)
+	err = readmsg.Flodecode(&buf, BIP0031Version, BaseEncoding)
 	if err != nil {
 		t.Errorf("decode of MsgPing failed [%v] err <%v>", buf, err)
 	}
@@ -169,13 +169,13 @@ func TestPingWire(t *testing.T) {
 	for i, test := range tests {
 		// Encode the message to wire format.
 		var buf bytes.Buffer
-		err := test.in.BtcEncode(&buf, test.pver, test.enc)
+		err := test.in.FloEncode(&buf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcEncode #%d error %v", i, err)
+			t.Errorf("FloEncode #%d error %v", i, err)
 			continue
 		}
 		if !bytes.Equal(buf.Bytes(), test.buf) {
-			t.Errorf("BtcEncode #%d\n got: %s want: %s", i,
+			t.Errorf("FloEncode #%d\n got: %s want: %s", i,
 				spew.Sdump(buf.Bytes()), spew.Sdump(test.buf))
 			continue
 		}
@@ -183,13 +183,13 @@ func TestPingWire(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgPing
 		rbuf := bytes.NewReader(test.buf)
-		err = msg.Btcdecode(rbuf, test.pver, test.enc)
+		err = msg.Flodecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("Btcdecode #%d error %v", i, err)
+			t.Errorf("Flodecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(msg, test.out) {
-			t.Errorf("Btcdecode #%d\n got: %s want: %s", i,
+			t.Errorf("Flodecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.out))
 			continue
 		}
@@ -226,9 +226,9 @@ func TestPingWireErrors(t *testing.T) {
 	for i, test := range tests {
 		// Encode to wire format.
 		w := newFixedWriter(test.max)
-		err := test.in.BtcEncode(w, test.pver, test.enc)
+		err := test.in.FloEncode(w, test.pver, test.enc)
 		if err != test.writeErr {
-			t.Errorf("BtcEncode #%d wrong error got: %v, want: %v",
+			t.Errorf("FloEncode #%d wrong error got: %v, want: %v",
 				i, err, test.writeErr)
 			continue
 		}
@@ -236,9 +236,9 @@ func TestPingWireErrors(t *testing.T) {
 		// Decode from wire format.
 		var msg MsgPing
 		r := newFixedReader(test.max, test.buf)
-		err = msg.Btcdecode(r, test.pver, test.enc)
+		err = msg.Flodecode(r, test.pver, test.enc)
 		if err != test.readErr {
-			t.Errorf("Btcdecode #%d wrong error got: %v, want: %v",
+			t.Errorf("Flodecode #%d wrong error got: %v, want: %v",
 				i, err, test.readErr)
 			continue
 		}

@@ -14,9 +14,9 @@ import (
 	"time"
 
 	"github.com/bitspill/flod/blockchain"
-	"github.com/bitspill/flod/btcec"
 	"github.com/bitspill/flod/chaincfg"
 	"github.com/bitspill/flod/chaincfg/chainhash"
+	"github.com/bitspill/flod/floec"
 	"github.com/bitspill/flod/txscript"
 	"github.com/bitspill/flod/wire"
 	"github.com/bitspill/floutil"
@@ -130,7 +130,7 @@ type poolHarness struct {
 	//
 	// payAddr is the p2sh address for the signing key and is used for the
 	// payment address throughout the tests.
-	signKey     *btcec.PrivateKey
+	signKey     *floec.PrivateKey
 	payAddr     floutil.Address
 	payScript   []byte
 	chainParams *chaincfg.Params
@@ -281,7 +281,7 @@ func newPoolHarness(chainParams *chaincfg.Params) (*poolHarness, []spendableOutp
 	if err != nil {
 		return nil, nil, err
 	}
-	signKey, signPub := btcec.PrivKeyFromBytes(btcec.S256(), keyBytes)
+	signKey, signPub := floec.PrivKeyFromBytes(floec.S256(), keyBytes)
 
 	// Generate associated pay-to-script-hash address and resulting payment
 	// script.

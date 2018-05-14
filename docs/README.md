@@ -6,7 +6,7 @@
         2. [Linux/BSD/MacOSX/POSIX](#PosixInstallation)
           1. [Gentoo Linux](#GentooInstallation)
     2. [Configuration](#Configuration)
-    3. [Controlling and Querying flod via btcctl](#BtcctlConfig)
+    3. [Controlling and Querying flod via btcctl](#FloctlConfig)
     4. [Mining](#Mining)
 3. [Help](#Help)
     1. [Startup](#Startup)
@@ -132,7 +132,7 @@ $ go install . ./cmd/...
 flod has a number of [configuration](http://godoc.org/github.com/bitspill/flod)
 options, which can be viewed by running: `$ flod --help`.
 
-<a name="BtcctlConfig" />
+<a name="FloctlConfig" />
 
 **2.3 Controlling and Querying flod via btcctl**
 

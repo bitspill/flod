@@ -56,9 +56,9 @@ func (msg *MsgAddr) ClearAddresses() {
 	msg.AddrList = []*NetAddress{}
 }
 
-// Btcdecode decodes r using the bitcoin protocol encoding into the receiver.
+// Flodecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgAddr) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgAddr) Flodecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	count, err := ReadVarInt(r, pver)
 	if err != nil {
 		return err
@@ -68,7 +68,7 @@ func (msg *MsgAddr) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) err
 	if count > MaxAddrPerMsg {
 		str := fmt.Sprintf("too many addresses for message "+
 			"[count %v, max %v]", count, MaxAddrPerMsg)
-		return messageError("MsgAddr.Btcdecode", str)
+		return messageError("MsgAddr.Flodecode", str)
 	}
 
 	addrList := make([]NetAddress, count)
@@ -84,22 +84,22 @@ func (msg *MsgAddr) Btcdecode(r io.Reader, pver uint32, enc MessageEncoding) err
 	return nil
 }
 
-// BtcEncode encodes the receiver to w using the bitcoin protocol encoding.
+// FloEncode encodes the receiver to w using the bitcoin protocol encoding.
 // This is part of the Message interface implementation.
-func (msg *MsgAddr) BtcEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
+func (msg *MsgAddr) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
 	// Protocol versions before MultipleAddressVersion only allowed 1 address
 	// per message.
 	count := len(msg.AddrList)
 	if pver < MultipleAddressVersion && count > 1 {
 		str := fmt.Sprintf("too many addresses for message of "+
 			"protocol version %v [count %v, max 1]", pver, count)
-		return messageError("MsgAddr.BtcEncode", str)
+		return messageError("MsgAddr.FloEncode", str)
 
 	}
 	if count > MaxAddrPerMsg {
 		str := fmt.Sprintf("too many addresses for message "+
 			"[count %v, max %v]", count, MaxAddrPerMsg)
-		return messageError("MsgAddr.BtcEncode", str)
+		return messageError("MsgAddr.FloEncode", str)
 	}
 
 	err := WriteVarInt(w, pver, uint64(count))

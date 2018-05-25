@@ -292,6 +292,7 @@ type MsgTx struct {
 	TxIn     []*TxIn
 	TxOut    []*TxOut
 	LockTime uint32
+	FloData  string
 }
 
 // AddTxIn adds a transaction input to the message.
@@ -579,6 +580,14 @@ func (msg *MsgTx) Flodecode(r io.Reader, pver uint32, enc MessageEncoding) error
 		return err
 	}
 
+	if msg.Version >= 2 {
+		msg.FloData, err = ReadVarString(r, pver)
+		if err != nil {
+			returnScriptBuffers()
+			return err
+		}
+	}
+
 	// Create a single allocation to house all of the scripts and set each
 	// input signature script and output public key script to the
 	// appropriate subslice of the overall contiguous buffer.  Then, return
@@ -741,7 +750,19 @@ func (msg *MsgTx) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error
 		}
 	}
 
-	return binarySerializer.PutUint32(w, littleEndian, msg.LockTime)
+	err = binarySerializer.PutUint32(w, littleEndian, msg.LockTime)
+	if err != nil {
+		return err
+	}
+
+	if msg.Version >= 2 {
+		err = WriteVarString(w, pver, msg.FloData)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // HasWitness returns false if none of the inputs within the transaction

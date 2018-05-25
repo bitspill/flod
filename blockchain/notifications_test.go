@@ -13,6 +13,7 @@ import (
 
 // TestNotifications ensures that notification callbacks are fired on events.
 func TestNotifications(t *testing.T) {
+	t.Skip("Requires flod/blockchain/testdata/blk_*.dat.bz2")
 	blocks, err := loadBlocks("blk_0_to_4.dat.bz2")
 	if err != nil {
 		t.Fatalf("Error loading file: %v\n", err)

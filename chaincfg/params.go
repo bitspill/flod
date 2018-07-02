@@ -162,7 +162,8 @@ type Params struct {
 	// RetargetAdjustmentFactor is the adjustment factor used to limit
 	// the minimum and maximum amount of adjustment that can occur between
 	// difficulty retargets.
-	RetargetAdjustmentFactor int64
+	RetargetAdjustmentFactorUp   int64
+	RetargetAdjustmentFactorDown int64
 
 	// ReduceMinDifficulty defines whether the network should reduce the
 	// minimum required difficulty after a long enough period of time has
@@ -234,21 +235,22 @@ var MainNetParams = Params{
 	},
 
 	// Chain parameters
-	GenesisBlock:             &genesisBlock,
-	GenesisHash:              &genesisHash,
-	PowLimit:                 mainPowLimit,
-	PowLimitBits:             0x1d00ffff,
-	BIP0034Height:            1679161, // 490a10507efe42b89104408787088b7c43310cc230310201b5f57dac6f513b8b
-	BIP0065Height:            1679161, // 490a10507efe42b89104408787088b7c43310cc230310201b5f57dac6f513b8b
-	BIP0066Height:            1679161, // 490a10507efe42b89104408787088b7c43310cc230310201b5f57dac6f513b8b
-	CoinbaseMaturity:         100,
-	SubsidyReductionInterval: 800000,
-	TargetTimespan:           time.Second * 40 * 6, // 14 days
-	TargetTimePerBlock:       time.Second * 40,     // 10 minutes
-	RetargetAdjustmentFactor: 4,                    // 25% less, 400% more
-	ReduceMinDifficulty:      false,
-	MinDiffReductionTime:     0,
-	GenerateSupported:        false,
+	GenesisBlock:                 &genesisBlock,
+	GenesisHash:                  &genesisHash,
+	PowLimit:                     mainPowLimit,
+	PowLimitBits:                 0x1d00ffff,
+	BIP0034Height:                1679161, // 490a10507efe42b89104408787088b7c43310cc230310201b5f57dac6f513b8b
+	BIP0065Height:                1679161, // 490a10507efe42b89104408787088b7c43310cc230310201b5f57dac6f513b8b
+	BIP0066Height:                1679161, // 490a10507efe42b89104408787088b7c43310cc230310201b5f57dac6f513b8b
+	CoinbaseMaturity:             100,
+	SubsidyReductionInterval:     800000,
+	TargetTimespan:               time.Second * 40 * 6, // 40 seconds * 6 blocks
+	TargetTimePerBlock:           time.Second * 40,     // 40 seconds
+	RetargetAdjustmentFactorUp:   4,                    // 25% less, 400% more
+	RetargetAdjustmentFactorDown: 4,
+	ReduceMinDifficulty:          false,
+	MinDiffReductionTime:         0,
+	GenerateSupported:            false,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: []Checkpoint{
@@ -336,21 +338,22 @@ var RegressionNetParams = Params{
 	DNSSeeds:    []DNSSeed{},
 
 	// Chain parameters
-	GenesisBlock:             &regTestGenesisBlock,
-	GenesisHash:              &regTestGenesisHash,
-	PowLimit:                 regressionPowLimit,
-	PowLimitBits:             0x207fffff,
-	CoinbaseMaturity:         100,
-	BIP0034Height:            100000000, // Not active - Permit ver 1 blocks
-	BIP0065Height:            1351,      // Used by regression tests
-	BIP0066Height:            1251,      // Used by regression tests
-	SubsidyReductionInterval: 150,
-	TargetTimespan:           time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
-	RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
-	ReduceMinDifficulty:      true,
-	MinDiffReductionTime:     time.Minute * 20, // TargetTimePerBlock * 2
-	GenerateSupported:        true,
+	GenesisBlock:                 &regTestGenesisBlock,
+	GenesisHash:                  &regTestGenesisHash,
+	PowLimit:                     regressionPowLimit,
+	PowLimitBits:                 0x207fffff,
+	CoinbaseMaturity:             100,
+	BIP0034Height:                100000000, // Not active - Permit ver 1 blocks
+	BIP0065Height:                1351,      // Used by regression tests
+	BIP0066Height:                1251,      // Used by regression tests
+	SubsidyReductionInterval:     150,
+	TargetTimespan:               time.Hour * 24 * 14, // 14 days
+	TargetTimePerBlock:           time.Minute * 10,    // 10 minutes
+	RetargetAdjustmentFactorUp:   4,                   // 25% less, 400% more
+	RetargetAdjustmentFactorDown: 4,
+	ReduceMinDifficulty:          true,
+	MinDiffReductionTime:         time.Minute * 20, // TargetTimePerBlock * 2
+	GenerateSupported:            true,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: nil,
@@ -415,21 +418,22 @@ var TestNet3Params = Params{
 	},
 
 	// Chain parameters
-	GenesisBlock:             &testNet3GenesisBlock,
-	GenesisHash:              &testNet3GenesisHash,
-	PowLimit:                 testNet3PowLimit,
-	PowLimitBits:             0x1d00ffff,
-	BIP0034Height:            21111,  // 0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8
-	BIP0065Height:            581885, // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
-	BIP0066Height:            330776, // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
-	CoinbaseMaturity:         100,
-	SubsidyReductionInterval: 210000,
-	TargetTimespan:           time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
-	RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
-	ReduceMinDifficulty:      true,
-	MinDiffReductionTime:     time.Minute * 20, // TargetTimePerBlock * 2
-	GenerateSupported:        false,
+	GenesisBlock:                 &testNet3GenesisBlock,
+	GenesisHash:                  &testNet3GenesisHash,
+	PowLimit:                     testNet3PowLimit,
+	PowLimitBits:                 0x1d00ffff,
+	BIP0034Height:                21111,  // 0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8
+	BIP0065Height:                581885, // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
+	BIP0066Height:                330776, // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
+	CoinbaseMaturity:             100,
+	SubsidyReductionInterval:     210000,
+	TargetTimespan:               time.Hour * 24 * 14, // 14 days
+	TargetTimePerBlock:           time.Minute * 10,    // 10 minutes
+	RetargetAdjustmentFactorUp:   4,                   // 25% less, 400% more
+	RetargetAdjustmentFactorDown: 4,
+	ReduceMinDifficulty:          true,
+	MinDiffReductionTime:         time.Minute * 20, // TargetTimePerBlock * 2
+	GenerateSupported:            false,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: []Checkpoint{
@@ -507,21 +511,22 @@ var SimNetParams = Params{
 	DNSSeeds:    []DNSSeed{}, // NOTE: There must NOT be any seeds.
 
 	// Chain parameters
-	GenesisBlock:             &simNetGenesisBlock,
-	GenesisHash:              &simNetGenesisHash,
-	PowLimit:                 simNetPowLimit,
-	PowLimitBits:             0x207fffff,
-	BIP0034Height:            0, // Always active on simnet
-	BIP0065Height:            0, // Always active on simnet
-	BIP0066Height:            0, // Always active on simnet
-	CoinbaseMaturity:         100,
-	SubsidyReductionInterval: 210000,
-	TargetTimespan:           time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
-	RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
-	ReduceMinDifficulty:      true,
-	MinDiffReductionTime:     time.Minute * 20, // TargetTimePerBlock * 2
-	GenerateSupported:        true,
+	GenesisBlock:                 &simNetGenesisBlock,
+	GenesisHash:                  &simNetGenesisHash,
+	PowLimit:                     simNetPowLimit,
+	PowLimitBits:                 0x207fffff,
+	BIP0034Height:                0, // Always active on simnet
+	BIP0065Height:                0, // Always active on simnet
+	BIP0066Height:                0, // Always active on simnet
+	CoinbaseMaturity:             100,
+	SubsidyReductionInterval:     210000,
+	TargetTimespan:               time.Hour * 24 * 14, // 14 days
+	TargetTimePerBlock:           time.Minute * 10,    // 10 minutes
+	RetargetAdjustmentFactorUp:   4,                   // 25% less, 400% more
+	RetargetAdjustmentFactorDown: 4,
+	ReduceMinDifficulty:          true,
+	MinDiffReductionTime:         time.Minute * 20, // TargetTimePerBlock * 2
+	GenerateSupported:            true,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: nil,

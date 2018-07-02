@@ -268,12 +268,11 @@ func newFakeChain(params *chaincfg.Params) *BlockChain {
 
 	targetTimespan := int64(params.TargetTimespan / time.Second)
 	targetTimePerBlock := int64(params.TargetTimePerBlock / time.Second)
-	adjustmentFactor := params.RetargetAdjustmentFactor
 	return &BlockChain{
 		chainParams:         params,
 		timeSource:          NewMedianTime(),
-		minRetargetTimespan: targetTimespan / adjustmentFactor,
-		maxRetargetTimespan: targetTimespan * adjustmentFactor,
+		minRetargetTimespan: targetTimespan * (100 - params.RetargetAdjustmentFactorUp) / 100,
+		maxRetargetTimespan: targetTimespan * (100 + params.RetargetAdjustmentFactorDown) / 100,
 		blocksPerRetarget:   int32(targetTimespan / targetTimePerBlock),
 		index:               index,
 		bestChain:           newChainView(node),

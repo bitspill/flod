@@ -41,8 +41,8 @@ func main() {
 	connCfg := &rpcclient.ConnConfig{
 		Host:         "localhost:8334",
 		Endpoint:     "ws",
-		User:         "yourrpcuser",
-		Pass:         "yourrpcpass",
+		User:         "user",
+		Pass:         "pass",
 		Certificates: certs,
 	}
 	client, err := rpcclient.New(connCfg, &ntfnHandlers)

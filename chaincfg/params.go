@@ -246,8 +246,8 @@ var MainNetParams = Params{
 	SubsidyReductionInterval:     800000,
 	TargetTimespan:               time.Second * 40 * 6, // 40 seconds * 6 blocks
 	TargetTimePerBlock:           time.Second * 40,     // 40 seconds
-	RetargetAdjustmentFactorUp:   4,                    // 25% less, 400% more
-	RetargetAdjustmentFactorDown: 4,
+	RetargetAdjustmentFactorUp:   2,
+	RetargetAdjustmentFactorDown: 3,
 	ReduceMinDifficulty:          false,
 	MinDiffReductionTime:         0,
 	GenerateSupported:            false,

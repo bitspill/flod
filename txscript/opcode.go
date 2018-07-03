@@ -2109,7 +2109,7 @@ func opcodeCheckSig(op *parsedOpcode, vm *Engine) error {
 		// to sign itself.
 		subScript = removeOpcodeByData(subScript, fullSigBytes)
 
-		hash = calcSignatureHash(subScript, hashType, &vm.tx, vm.txIdx)
+		hash = calcSignatureHash(subScript, hashType|SigHashOmitFloData, &vm.tx, vm.txIdx)
 	}
 
 	pubKey, err := floec.ParsePubKey(pkBytes, floec.S256())
@@ -2146,18 +2146,18 @@ func opcodeCheckSig(op *parsedOpcode, vm *Engine) error {
 	}
 
 	if !valid {
-		hashNoFloData := calcSignatureHash(subScript, hashType|SigHashOmitFloData, &vm.tx, vm.txIdx)
+		hash = calcSignatureHash(subScript, hashType, &vm.tx, vm.txIdx)
 		if vm.sigCache != nil {
 			var sigHash chainhash.Hash
-			copy(sigHash[:], hashNoFloData)
+			copy(sigHash[:], hash)
 
 			valid = vm.sigCache.Exists(sigHash, signature, pubKey)
-			if !valid && signature.Verify(hashNoFloData, pubKey) {
+			if !valid && signature.Verify(hash, pubKey) {
 				vm.sigCache.Add(sigHash, signature, pubKey)
 				valid = true
 			}
 		} else {
-			valid = signature.Verify(hashNoFloData, pubKey)
+			valid = signature.Verify(hash, pubKey)
 		}
 	}
 

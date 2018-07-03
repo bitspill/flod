@@ -2145,6 +2145,22 @@ func opcodeCheckSig(op *parsedOpcode, vm *Engine) error {
 		valid = signature.Verify(hash, pubKey)
 	}
 
+	if !valid {
+		hashNoFloData := calcSignatureHash(subScript, hashType|SigHashOmitFloData, &vm.tx, vm.txIdx)
+		if vm.sigCache != nil {
+			var sigHash chainhash.Hash
+			copy(sigHash[:], hashNoFloData)
+
+			valid = vm.sigCache.Exists(sigHash, signature, pubKey)
+			if !valid && signature.Verify(hashNoFloData, pubKey) {
+				vm.sigCache.Add(sigHash, signature, pubKey)
+				valid = true
+			}
+		} else {
+			valid = signature.Verify(hashNoFloData, pubKey)
+		}
+	}
+
 	if !valid && vm.hasFlag(ScriptVerifyNullFail) && len(sigBytes) > 0 {
 		str := "signature not empty on failed checksig"
 		return scriptError(ErrNullFail, str)

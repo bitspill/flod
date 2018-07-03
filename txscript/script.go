@@ -29,6 +29,7 @@ const (
 	SigHashAll          SigHashType = 0x1
 	SigHashNone         SigHashType = 0x2
 	SigHashSingle       SigHashType = 0x3
+	SigHashOmitFloData  SigHashType = 1 << 6
 	SigHashAnyOneCanPay SigHashType = 0x80
 
 	// sigHashMask defines the number of bits of the hash type which is used
@@ -210,7 +211,7 @@ func parseScriptTemplate(script []byte, opcodes *[256]opcode) ([]parsedOpcode, e
 		case op.length == 1:
 			i++
 
-		// Data pushes of specific lengths -- OP_DATA_[1-75].
+			// Data pushes of specific lengths -- OP_DATA_[1-75].
 		case op.length > 1:
 			if len(script[i:]) < op.length {
 				str := fmt.Sprintf("opcode %s requires %d "+
@@ -534,6 +535,11 @@ func calcWitnessSignatureHash(subScript []parsedOpcode, sigHashes *TxSigHashes,
 	var bLockTime [4]byte
 	binary.LittleEndian.PutUint32(bLockTime[:], tx.LockTime)
 	sigHash.Write(bLockTime[:])
+	if tx.Version >= 2 {
+		var bFloData bytes.Buffer
+		wire.WriteVarString(&bFloData, 0, tx.FloData)
+		sigHash.Write(bFloData.Bytes())
+	}
 	var bHashType [4]byte
 	binary.LittleEndian.PutUint32(bHashType[:], uint32(hashType))
 	sigHash.Write(bHashType[:])
@@ -580,6 +586,7 @@ func shallowCopyTx(tx *wire.MsgTx) wire.MsgTx {
 		txOuts[i] = *oldTxOut
 		txCopy.TxOut[i] = &txOuts[i]
 	}
+	txCopy.FloData = tx.FloData
 	return txCopy
 }
 
@@ -587,6 +594,7 @@ func shallowCopyTx(tx *wire.MsgTx) wire.MsgTx {
 // engine instance, calculate the signature hash to be used for signing and
 // verification.
 func CalcSignatureHash(script []byte, hashType SigHashType, tx *wire.MsgTx, idx int) ([]byte, error) {
+	panic("yo")
 	parsedScript, err := parseScript(script)
 	if err != nil {
 		return nil, fmt.Errorf("cannot parse output script: %v", err)
@@ -598,6 +606,9 @@ func CalcSignatureHash(script []byte, hashType SigHashType, tx *wire.MsgTx, idx 
 // engine instance, calculate the signature hash to be used for signing and
 // verification.
 func calcSignatureHash(script []parsedOpcode, hashType SigHashType, tx *wire.MsgTx, idx int) []byte {
+	omitFloData := hashType&SigHashOmitFloData != 0
+	hashType &= ^SigHashOmitFloData
+
 	// The SigHashSingle signature type signs only the corresponding input
 	// and output (the output with the same index number as the input).
 	//
@@ -684,7 +695,11 @@ func calcSignatureHash(script []parsedOpcode, hashType SigHashType, tx *wire.Msg
 	// transaction and the hash type (encoded as a 4-byte little-endian
 	// value) appended.
 	wbuf := bytes.NewBuffer(make([]byte, 0, txCopy.SerializeSizeStripped()+4))
-	txCopy.SerializeNoWitness(wbuf)
+	if omitFloData {
+		txCopy.SerializeNoFloData(wbuf)
+	} else {
+		txCopy.SerializeNoWitness(wbuf)
+	}
 	binary.Write(wbuf, binary.LittleEndian, hashType)
 	return chainhash.DoubleHashB(wbuf.Bytes())
 }

@@ -66,6 +66,10 @@ const (
 	// using the default Bitcoin wire protocol specification. For transaction
 	// messages, the new encoding format detailed in BIP0144 will be used.
 	WitnessEncoding
+
+	// OmitFloDataEncoding encodes transaction messages without FloData
+	// for use in signature generation legacy compatibility with FLO v0.10.4
+	OmitFloDataEncoding
 )
 
 // LatestEncoding is the most recently specified encoding for the Bitcoin wire

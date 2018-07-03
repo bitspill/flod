@@ -689,6 +689,9 @@ func (msg *MsgTx) DeserializeNoWitness(r io.Reader) error {
 // See Serialize for encoding transactions to be stored to disk, such as in a
 // database, as opposed to encoding transactions for the wire.
 func (msg *MsgTx) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error {
+	OmitFloData := enc&OmitFloDataEncoding != 0
+	enc &= ^OmitFloDataEncoding
+
 	err := binarySerializer.PutUint32(w, littleEndian, uint32(msg.Version))
 	if err != nil {
 		return err
@@ -755,7 +758,7 @@ func (msg *MsgTx) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error
 		return err
 	}
 
-	if msg.Version >= 2 {
+	if msg.Version >= 2 && !OmitFloData {
 		err = WriteVarString(w, pver, msg.FloData)
 		if err != nil {
 			return err
@@ -804,6 +807,12 @@ func (msg *MsgTx) Serialize(w io.Writer) error {
 // data, the old serialization format will still be used.
 func (msg *MsgTx) SerializeNoWitness(w io.Writer) error {
 	return msg.FloEncode(w, 0, BaseEncoding)
+}
+
+// SerializeNoFloData encodes the transaction to w in an identical manner to
+// Serialize, however it will omit the FloData field.
+func (msg *MsgTx) SerializeNoFloData(w io.Writer) error {
+	return msg.FloEncode(w, 0, BaseEncoding|OmitFloDataEncoding)
 }
 
 // baseSize returns the serialized size of the transaction without accounting

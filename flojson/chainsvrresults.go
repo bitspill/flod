@@ -515,6 +515,7 @@ type TxRawResult struct {
 	Confirmations uint64 `json:"confirmations,omitempty"`
 	Time          int64  `json:"time,omitempty"`
 	Blocktime     int64  `json:"blocktime,omitempty"`
+	FloData       string `json:"floData,omitempty"`
 }
 
 // SearchRawTransactionsResult models the data from the searchrawtransaction
@@ -533,6 +534,7 @@ type SearchRawTransactionsResult struct {
 	Confirmations uint64       `json:"confirmations,omitempty"`
 	Time          int64        `json:"time,omitempty"`
 	Blocktime     int64        `json:"blocktime,omitempty"`
+	FloData       string       `json:"floData,omitempty"`
 }
 
 // TxRawDecodeResult models the data from the decoderawtransaction command.
@@ -542,6 +544,7 @@ type TxRawDecodeResult struct {
 	Locktime uint32 `json:"locktime"`
 	Vin      []Vin  `json:"vin"`
 	Vout     []Vout `json:"vout"`
+	FloData  string `json:"floData,omitempty"`
 }
 
 // ValidateAddressChainResult models the data returned by the chain server

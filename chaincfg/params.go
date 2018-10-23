@@ -33,7 +33,7 @@ var (
 
 	// testNet3PowLimit is the highest proof of work value a Bitcoin block
 	// can have for the test network (version 3).  It is the value
-	// 2^224 - 1.
+	// 2^236 - 1.
 	testNet3PowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 236), bigOne)
 
 	// simNetPowLimit is the highest proof of work value a Bitcoin block
@@ -263,7 +263,7 @@ var MainNetParams = Params{
 		{290036, newHashFromStr("145994381e5e4f0e5674adc1ace9a03b670838792f6bd6b650c80466453c2da3")},
 		{344665, newHashFromStr("40fe36d8dec357aa529b6b1d99b2989a37ed8c7b065a0e3345cd15a751b9c1ad")},
 		{400236, newHashFromStr("f9a4b8e21d410539e45ff3f11c28dee8966de7edffc45fd02dd1a5f4e7d4ef38")},
-		//{ 415000, newHashFromStr("16ef8ab98a7300039a5755d5bdc00e31dada9d2f1c440ff7928f43c4ea41c0a8")},
+		// { 415000, newHashFromStr("16ef8ab98a7300039a5755d5bdc00e31dada9d2f1c440ff7928f43c4ea41c0a8")},
 		{420937, newHashFromStr("48a75e4687021ec0dda2031439de50b61933e197a4e1a1185d131cc2b59b8444")},
 		{425606, newHashFromStr("62c8d811b1a49f6fdaffded704dc48b1c98d6f8dd736d8afb96c9b097774a85e")},
 		{508694, newHashFromStr("65cde197e9118e5164c4dcdcdc6fcfaf8c0de605d569cefd56aa220e7739da6a")},
@@ -418,7 +418,7 @@ var TestNet3Params = Params{
 	GenesisBlock:                 &testNet3GenesisBlock,
 	GenesisHash:                  &testNet3GenesisHash,
 	PowLimit:                     testNet3PowLimit,
-	PowLimitBits:                 0x1d00ffff,
+	PowLimitBits:                 0x1e0fffff,
 	BIP0034Height:                33600, // 4ac31d938531317c065405a9b23478c8c99204ff17fc294cb09821e2c2b42e65
 	BIP0065Height:                33600, // 4ac31d938531317c065405a9b23478c8c99204ff17fc294cb09821e2c2b42e65
 	BIP0066Height:                33600, // 4ac31d938531317c065405a9b23478c8c99204ff17fc294cb09821e2c2b42e65
@@ -429,7 +429,7 @@ var TestNet3Params = Params{
 	RetargetAdjustmentFactorUp:   2,
 	RetargetAdjustmentFactorDown: 3,
 	ReduceMinDifficulty:          true,
-	MinDiffReductionTime:         time.Minute * 20, // TargetTimePerBlock * 2
+	MinDiffReductionTime:         time.Second * 80, // TargetTimePerBlock * 2
 	GenerateSupported:            false,
 
 	// Checkpoints ordered from oldest to newest.

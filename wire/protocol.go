@@ -140,6 +140,8 @@ const (
 
 	// TestNet3 represents the test network (version 3).
 	BtcTestNet3 BitcoinNet = 0x0709110b
+
+	LtcMainNet BitcoinNet = 0xdbb6c0fb
 )
 
 // bnStrings is a map of bitcoin networks back to their constant names for

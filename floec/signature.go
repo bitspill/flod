@@ -397,7 +397,7 @@ func RecoverCompact(curve *KoblitzCurve, signature,
 		return nil, false, errors.New("invalid compact signature size")
 	}
 
-	iteration := int((signature[0] - 27) & ^byte(4))
+	iteration := int((signature[0] - 27) % byte(4))
 
 	// format is <header byte><bitlen R><bitlen S>
 	sig := &Signature{
@@ -410,7 +410,7 @@ func RecoverCompact(curve *KoblitzCurve, signature,
 		return nil, false, err
 	}
 
-	return key, ((signature[0] - 27) & 4) == 4, nil
+	return key, signature[0] >= 31, nil
 }
 
 // signRFC6979 generates a deterministic ECDSA signature according to RFC 6979 and BIP 62.

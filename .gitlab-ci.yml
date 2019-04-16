@@ -22,7 +22,7 @@ Build:
     - mkdir -p $CI_PROJECT_DIR/bin/
     - docker build -t flod-build:$CI_COMMIT_REF_SLUG -f ci/Dockerfile.build .
     - container_id=$(docker create flod-build:$CI_COMMIT_REF_SLUG)
-    - for EXE in addblock findcheckpoint floctl flod gencerts; do docker cp $container_id:/go/$EXE ./$CI_PROJECT_DIR/bin/$EXE; done
+    - for EXE in addblock findcheckpoint floctl flod gencerts; do docker cp $container_id:/go/$EXE $CI_PROJECT_DIR/bin/$EXE; done
     - docker rm -v $container_id
   artifacts:
     paths:

@@ -1,0 +1,38 @@
+## Instructions
+#
+# To build `flod`:
+# docker build -f ci/Dockerfile.build -t flod-build:latest .
+#
+# To copy the binary targets from the container to the docker host run:
+# id=$(docker create flod-build:latest)
+#   for BIN in addblock findcheckpoint floctl flod gencerts; do docker cp $id:/go/$BIN ./$BIN; done
+# docker rm -v $id
+# 
+# Binary Targets:
+#   /go/addblock
+#   /go/findcheckpoint
+#   /go/floctl
+#   /go/flod
+#   /go/gencerts
+#
+FROM golang:1.12
+LABEL maintainer="Duane Johnson <dujohnson@mediciventures.com>"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		tar bash curl \
+		sudo \
+		&& rm -rf /var/lib/apt/lists/*
+
+ENV SRC_PATH $GOPATH/src/github.com/bitspill/flod
+ENV GLIDE_TAG v0.12.3
+ENV GOBIN $SRC_PATH/bin
+
+RUN mkdir -p $SRC_PATH
+COPY . $SRC_PATH
+WORKDIR $SRC_PATH
+
+RUN curl -L "https://github.com/Masterminds/glide/releases/download/$GLIDE_TAG/glide-$GLIDE_TAG-linux-amd64.tar.gz" | tar -xvz
+RUN $SRC_PATH/linux-amd64/glide install
+
+RUN go install . ./cmd/...
+RUN cp $SRC_PATH/bin/* /go/

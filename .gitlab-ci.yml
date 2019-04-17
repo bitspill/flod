@@ -1,24 +1,29 @@
-image: golang:latest
+image: docker:stable
 
 stages:
   - build
 
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_HUB_NAME: mediciland/flod
+
+before_script:
+  - apk update && apk add curl zip unzip tar
+  - docker login -u $dockerhub_user -p $dockerhub_pass
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
 Build:
   stage: build
   script:
-    - mkdir -p $GOPATH/src/github.com/bitspill/
-    - cp -r $CI_PROJECT_DIR $GOPATH/src/github.com/bitspill/flod
-    - mkdir bin
-    - cd $GOPATH/src/github.com/bitspill/flod
-    - GLIDE_TAG=v0.12.3
-    - GLIDE_DOWNLOAD="https://github.com/Masterminds/glide/releases/download/$GLIDE_TAG/glide-$GLIDE_TAG-linux-amd64.tar.gz"
-    - curl -L $GLIDE_DOWNLOAD | tar -xvz
-    - export PATH=$PATH:$PWD/linux-amd64/
-    - glide install
-    - export GOBIN=$CI_PROJECT_DIR/bin
-    - go install . ./cmd/...
-    - cd $CI_PROJECT_DIR
-    - ls bin
+    - mkdir -p $CI_PROJECT_DIR/bin/
+    - docker build -t flod-build:$CI_COMMIT_REF_SLUG -f ci/Dockerfile.build .
+    - container_id=$(docker create flod-build:$CI_COMMIT_REF_SLUG)
+    - for EXE in addblock findcheckpoint floctl flod gencerts; do docker cp $container_id:/go/$EXE $CI_PROJECT_DIR/bin/$EXE; done
+    - docker rm -v $container_id
   artifacts:
     paths:
       - bin/addblock

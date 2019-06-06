@@ -179,6 +179,9 @@ type Params struct {
 
 	// GenerateSupported specifies whether or not CPU mining is allowed.
 	GenerateSupported bool
+	
+	// PowNoRetargeting specifies wether the block retargeting calculation is performed.
+	PowNoRetargeting bool
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints []Checkpoint
@@ -251,6 +254,7 @@ var MainNetParams = Params{
 	ReduceMinDifficulty:          false,
 	MinDiffReductionTime:         0,
 	GenerateSupported:            false,
+	PowNoRetargeting:             false,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: []Checkpoint{
@@ -334,7 +338,7 @@ var MainNetParams = Params{
 var RegressionNetParams = Params{
 	Name:        "regtest",
 	Net:         wire.TestNet,
-	DefaultPort: "18444",
+	DefaultPort: "17412",
 	DNSSeeds:    []DNSSeed{},
 
 	// Chain parameters
@@ -347,13 +351,14 @@ var RegressionNetParams = Params{
 	BIP0065Height:                1351,      // Used by regression tests
 	BIP0066Height:                1251,      // Used by regression tests
 	SubsidyReductionInterval:     150,
-	TargetTimespan:               time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:           time.Minute * 10,    // 10 minutes
-	RetargetAdjustmentFactorUp:   4,                   // 25% less, 400% more
-	RetargetAdjustmentFactorDown: 4,
+	TargetTimespan:               time.Second * 40 * 6, // 40 seconds * 6 blocks
+	TargetTimePerBlock:           time.Second * 40,     // 40 seconds
+	RetargetAdjustmentFactorUp:   2,                   // 25% less, 400% more
+	RetargetAdjustmentFactorDown: 3,
 	ReduceMinDifficulty:          true,
-	MinDiffReductionTime:         time.Minute * 20, // TargetTimePerBlock * 2
+	MinDiffReductionTime:         time.Second * 80, // TargetTimePerBlock * 2
 	GenerateSupported:            true,
+	PowNoRetargeting:             true,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: nil,
@@ -363,7 +368,7 @@ var RegressionNetParams = Params{
 	// The miner confirmation window is defined as:
 	//   target proof of work timespan / target proof of work spacing
 	RuleChangeActivationThreshold: 108, // 75%  of MinerConfirmationWindow
-	MinerConfirmationWindow:       144,
+	MinerConfirmationWindow:       144, // Faster than normal for regtest (144 instead of 2016)
 	Deployments: [DefinedDeployments]ConsensusDeployment{
 		DeploymentTestDummy: {
 			BitNumber:  28,
@@ -387,12 +392,12 @@ var RegressionNetParams = Params{
 
 	// Human-readable part for Bech32 encoded segwit addresses, as defined in
 	// BIP 173.
-	Bech32HRPSegwit: "bcrt", // always bcrt for reg test net
+	Bech32HRPSegwit: "rflo", // always bcrt for reg test net
 
 	// Address encoding magics
-	PubKeyHashAddrID: 0x6f, // starts with m or n
-	ScriptHashAddrID: 0xc4, // starts with 2
-	PrivateKeyID:     0xef, // starts with 9 (uncompressed) or c (compressed)
+	PubKeyHashAddrID: 115,
+	ScriptHashAddrID: 198,
+	PrivateKeyID:     239, // starts with 9 (uncompressed) or c (compressed)
 
 	// BIP32 hierarchical deterministic extended key magics
 	HDPrivateKeyID: [4]byte{0x04, 0x35, 0x83, 0x94}, // starts with tprv
@@ -431,6 +436,7 @@ var TestNet3Params = Params{
 	ReduceMinDifficulty:          true,
 	MinDiffReductionTime:         time.Second * 80, // TargetTimePerBlock * 2
 	GenerateSupported:            false,
+	PowNoRetargeting:             false,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: []Checkpoint{
@@ -516,6 +522,7 @@ var SimNetParams = Params{
 	ReduceMinDifficulty:          true,
 	MinDiffReductionTime:         time.Minute * 20, // TargetTimePerBlock * 2
 	GenerateSupported:            true,
+	PowNoRetargeting:             true,
 
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: nil,

@@ -127,7 +127,7 @@ const (
 	MainNet BitcoinNet = 0xf1a5c0fd
 
 	// TestNet represents the regression test network.
-	TestNet BitcoinNet = 0xdab5bffa
+	TestNet BitcoinNet = 0xfabfb5da
 
 	// TestNet3 represents the test network (version 3).
 	TestNet3 BitcoinNet = 0xf25ac0fd

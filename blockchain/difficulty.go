@@ -228,6 +228,11 @@ func (b *BlockChain) calcNextRequiredDifficulty(lastNode *blockNode, newBlockTim
 		return b.chainParams.PowLimitBits, nil
 	}
 
+	// If PowNoRetargeting is set to true (regtest), then return the last blocks bits
+	if b.chainParams.PowNoRetargeting {
+		return lastNode.bits, nil
+	}
+
 	// Return the previous block's difficulty requirements if this block
 	// is not at a difficulty retarget interval.
 	if (lastNode.height+1)%b.retargetInterval != 0 {

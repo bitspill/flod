@@ -599,16 +599,18 @@ func (r FutureSearchRawTransactionsVerboseResult) Receive() ([]*flojson.SearchRa
 //
 // See SearchRawTransactionsVerbose for the blocking version and more details.
 func (c *Client) SearchRawTransactionsVerboseAsync(address floutil.Address, skip,
-	count int, includePrevOut, reverse bool, filterAddrs *[]string) FutureSearchRawTransactionsVerboseResult {
+	count int, includePrevOut, reverse bool, filterAddrs []string) FutureSearchRawTransactionsVerboseResult {
 
 	addr := address.EncodeAddress()
 	verbose := flojson.Int(1)
 	var prevOut *int
 	if includePrevOut {
 		prevOut = flojson.Int(1)
+	} else if reverse || filterAddrs != nil {
+		prevOut = flojson.Int(0)
 	}
 	cmd := flojson.NewSearchRawTransactionsCmd(addr, verbose, &skip, &count,
-		prevOut, &reverse, filterAddrs)
+		prevOut, &reverse, &filterAddrs)
 	return c.sendCmd(cmd)
 }
 
@@ -623,7 +625,7 @@ func (c *Client) SearchRawTransactionsVerbose(address floutil.Address, skip,
 	count int, includePrevOut, reverse bool, filterAddrs []string) ([]*flojson.SearchRawTransactionsResult, error) {
 
 	return c.SearchRawTransactionsVerboseAsync(address, skip, count,
-		includePrevOut, reverse, &filterAddrs).Receive()
+		includePrevOut, reverse, filterAddrs).Receive()
 }
 
 // FutureDecodeScriptResult is a future promise to deliver the result

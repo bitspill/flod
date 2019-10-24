@@ -292,7 +292,7 @@ type MsgTx struct {
 	TxIn     []*TxIn
 	TxOut    []*TxOut
 	LockTime uint32
-	FloData  string
+	FloData  []byte
 }
 
 // AddTxIn adds a transaction input to the message.
@@ -581,7 +581,7 @@ func (msg *MsgTx) Flodecode(r io.Reader, pver uint32, enc MessageEncoding) error
 	}
 
 	if msg.Version >= 2 {
-		msg.FloData, err = ReadVarString(r, pver)
+		msg.FloData, err = ReadVarBytes(r, pver, 1<<32-1, "")
 		if err != nil {
 			returnScriptBuffers()
 			return err
@@ -759,7 +759,7 @@ func (msg *MsgTx) FloEncode(w io.Writer, pver uint32, enc MessageEncoding) error
 	}
 
 	if msg.Version >= 2 && !OmitFloData {
-		err = WriteVarString(w, pver, msg.FloData)
+		err = WriteVarBytes(w, pver, msg.FloData)
 		if err != nil {
 			return err
 		}

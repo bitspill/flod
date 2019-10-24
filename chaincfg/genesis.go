@@ -47,7 +47,7 @@ var genesisCoinbaseTx = wire.MsgTx{
 			},
 		},
 	},
-	FloData:  "text:Florincoin genesis block",
+	FloData:  []byte("text:Florincoin genesis block"),
 	LockTime: 0,
 }
 

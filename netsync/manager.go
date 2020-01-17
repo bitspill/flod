@@ -327,7 +327,7 @@ func (sm *SyncManager) isSyncCandidate(peer *peerpkg.Peer) bool {
 			return false
 		}
 
-		if host != "127.0.0.1" && host != "localhost" {
+		if host != "127.0.0.1" && host != "localhost" && !isLocal(net.ParseIP(host)) {
 			return false
 		}
 	} else {
@@ -1434,4 +1434,19 @@ func New(config *Config) (*SyncManager, error) {
 	sm.chain.Subscribe(sm.handleBlockchainNotification)
 
 	return &sm, nil
+}
+
+// Checks if the IP is within the local IP range
+// Proposed to be added to golang in pull #30278
+// https://github.com/golang/go/pull/30278
+// Local version of the newly proposed global method in the net package
+func isLocal(ip net.IP) bool {
+	if ip4 := ip.To4(); ip4 != nil {
+		// Local IPv4 addresses are defined in https://tools.ietf.org/html/rfc1918
+		return ip4[0] == 10 ||
+			(ip4[0] == 172 && ip4[1]&0xf0 == 16) ||
+			(ip4[0] == 192 && ip4[1] == 168)
+	}
+	// Local IPv6 addresses are defined in https://tools.ietf.org/html/rfc4193
+	return len(ip) == net.IPv6len && ip[0]&0xfe == 0xfc
 }
